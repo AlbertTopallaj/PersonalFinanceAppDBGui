@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import se.albert.personalfinanceguidb.models.AddTransaction;
+import se.albert.personalfinanceguidb.models.Transaction;
 import se.albert.personalfinanceguidb.models.DataStore;
 import se.albert.personalfinanceguidb.models.Stats;
 
@@ -53,12 +53,12 @@ public class ViewTransactionsScene { // Klassens namn
                 new Label("Datum:"), dateFilter); // Typ och datum
 
         // Här kommer själva listan av data, när en användare skickar in en ny transaktion skickas till hit och sparas tillfälligt i listan
-        ObservableList<AddTransaction> observableTransactions =
+        ObservableList<Transaction> observableTransactions =
                 FXCollections.observableArrayList(DataStore.getTransactions()); // Tar emot datan från klassen DataStore
-        FilteredList<AddTransaction> filteredTransactions = // Lista för filterade transaktioner
+        FilteredList<Transaction> filteredTransactions = // Lista för filterade transaktioner
                 new FilteredList<>(observableTransactions); // Som ovan
 
-        ListView<AddTransaction> transactionListView = new ListView<>(filteredTransactions); // En listview för filterade transaktioner
+        ListView<Transaction> transactionListView = new ListView<>(filteredTransactions); // En listview för filterade transaktioner
         transactionListView.setPrefHeight(300); // Höjden sätts för listview
 
         // --- Statistik ---
@@ -121,7 +121,7 @@ public class ViewTransactionsScene { // Klassens namn
         Button deleteBtn = new Button("🗑 Radera vald transaktion"); // Knapp för att radera transaktioner
         deleteBtn.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
         deleteBtn.setOnAction(e -> { // Om man trycker på radera transaktions knappen så händer följande
-            AddTransaction selected = transactionListView.getSelectionModel().getSelectedItem(); // Man markerar transaktionen
+            Transaction selected = transactionListView.getSelectionModel().getSelectedItem(); // Man markerar transaktionen
             if (selected != null) { // Om man har valt en transaktion
                 DataStore.removeTransaction(selected); // Man tillkallar removeTransaction i dataStore
                 observableTransactions.remove(selected); // Man raderar den från listan

@@ -3,12 +3,11 @@ package se.albert.personalfinanceguidb.UI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import se.albert.personalfinanceguidb.models.AddTransaction;
+import se.albert.personalfinanceguidb.models.Transaction;
 import se.albert.personalfinanceguidb.models.DataStore;
 
 
@@ -34,7 +33,7 @@ public class MenuScene { // Klassens namn
 
         int balance = DataStore.getTransactions() // Variabel för att visa kontobalans sätts
                 .stream() // Allt som strömmar genom AddTransaction tas emot
-                .mapToInt(AddTransaction::getAmount) // Man tar emot det som går igenom konstruktorn getAmount
+                .mapToInt(Transaction::getAmount) // Man tar emot det som går igenom konstruktorn getAmount
                 .sum(); //  Man plusar ihop allting för att se totalen
 
         Label balanceLabel = new Label("Din kontobalans: " + balance + " kr"); // Balansen sätts i UI

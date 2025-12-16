@@ -36,12 +36,12 @@ public class Stats { // Klassens namn
     }
 
 
-    private static int sumByFilter(String type, java.util.function.Predicate<AddTransaction> filter) { // Metod för att få ut summan av filter
-        List<AddTransaction> transactions = DataStore.getTransactions(); // Ta emot listan i DataStore
+    private static int sumByFilter(String type, java.util.function.Predicate<Transaction> filter) { // Metod för att få ut summan av filter
+        List<Transaction> transactions = DataStore.getTransactions(); // Ta emot listan i DataStore
         return transactions.stream() // Returnera
                 .filter(filter)// Filter
                 .filter(t -> "Alla".equals(type) || t.getType().equals(type)) // Typen av transaktion
-                .mapToInt(AddTransaction::getAmount) // Ta emot värdet i kronor
+                .mapToInt(Transaction::getAmount) // Ta emot värdet i kronor
                 .sum(); // Summera ihop
     }
 }
