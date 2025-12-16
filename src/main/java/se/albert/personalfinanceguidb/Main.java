@@ -20,6 +20,10 @@ public class Main extends Application {  // Main klassen, vad som ska köras
     }
 
     public static void main(String[] args) { // Metod för att starta
+        String dbUrl = System.getenv("DATABASE_URL");
+        String dbUser = System.getenv("DATABASE_USER");
+        String dbPassword = System.getenv("DATABASE_PASSWORD");
+
         launch(args); // Startar applikationen
     }
 }
