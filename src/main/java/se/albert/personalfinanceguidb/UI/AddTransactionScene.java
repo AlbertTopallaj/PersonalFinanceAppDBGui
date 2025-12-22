@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.Transaction;
-import se.albert.personalfinanceguidb.models.DataStore;
 
 
 import java.time.LocalDate;

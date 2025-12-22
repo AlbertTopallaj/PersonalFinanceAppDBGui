@@ -3,7 +3,6 @@ package se.albert.personalfinanceguidb;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.UI.LoginScene;
-import se.albert.personalfinanceguidb.models.DataStore;
 
 
 // Importerade bibliotek samt importerad klass så att det går att koppla de samman.

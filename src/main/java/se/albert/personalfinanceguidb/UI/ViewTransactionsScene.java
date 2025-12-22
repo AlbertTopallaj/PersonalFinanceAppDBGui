@@ -10,8 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.Transaction;
-import se.albert.personalfinanceguidb.models.DataStore;
-import se.albert.personalfinanceguidb.models.Stats;
 
 
 import java.time.LocalDate;
