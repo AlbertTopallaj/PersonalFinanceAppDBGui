@@ -1,4 +1,4 @@
-package se.albert.personalfinanceguidb.UI;
+package se.albert.personalfinanceguidb.scenes;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

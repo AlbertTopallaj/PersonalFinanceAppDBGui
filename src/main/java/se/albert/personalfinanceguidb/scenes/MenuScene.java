@@ -1,4 +1,4 @@
-package se.albert.personalfinanceguidb.UI;
+package se.albert.personalfinanceguidb.scenes;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -48,7 +48,7 @@ public class MenuScene { // Klassens namn
         Button viewTransactions = new Button("Visa transaktioner"); // Knapp för att gå in till ViewTransactionsScene
         viewTransactions.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
         viewTransactions.setOnAction(e -> // Om man trycker på knappen händer följande
-                primaryStage.setScene(new ViewTransactionsScene().create(primaryStage)) // Man sätter scenen till ViewTransactionsScene
+                primaryStage.setScene(new ViewTransactionScene().create(primaryStage)) // Man sätter scenen till ViewTransactionsScene
         );
 
         Button quit = new Button("Stäng av programmet"); // Knapp för att stänga av programmet

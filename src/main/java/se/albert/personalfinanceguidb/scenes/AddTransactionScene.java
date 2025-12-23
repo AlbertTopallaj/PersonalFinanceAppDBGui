@@ -1,4 +1,4 @@
-package se.albert.personalfinanceguidb.UI;
+package se.albert.personalfinanceguidb.scenes;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -60,7 +60,7 @@ public class AddTransactionScene { // Klassens namn
                 LocalDate date = datePicker.getValue(); // Värdet för datum tas emot
                 String description = descriptionField.getText(); // Värdet för beskrivningen tas emot
 
-                Transaction transaction = new Transaction(amount, description, type, date); // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
+                Transaction transaction = new Transaction(id, amount, description, type, date); // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
                 DataStore.addTransaction(transaction); // Transaktionen skickas till DataStore
                 transactionSaved.setText("Transaktion sparad!"); // Text för att bekräfta att transaktionen sparades
                 amountField.clear(); // Tömma samtliga input field

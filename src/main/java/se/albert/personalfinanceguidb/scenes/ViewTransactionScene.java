@@ -1,4 +1,4 @@
-package se.albert.personalfinanceguidb.UI;
+package se.albert.personalfinanceguidb.scenes;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +17,7 @@ import java.time.temporal.IsoFields;
 
 // Importerade bibiliotek och andra klasser
 
-public class ViewTransactionsScene { // Klassens namn
+public class ViewTransactionScene { // Klassens namn
 
     public Scene create(Stage primaryStage) { // Metoden för scenen, stage är primaryStage
 
@@ -51,13 +51,13 @@ public class ViewTransactionsScene { // Klassens namn
                 new Label("Datum:"), dateFilter); // Typ och datum
 
         // Här kommer själva listan av data, när en användare skickar in en ny transaktion skickas till hit och sparas tillfälligt i listan
-        ObservableList<Transaction> observableTransactions =
-                FXCollections.observableArrayList(DataStore.getTransactions()); // Tar emot datan från klassen DataStore
-        FilteredList<Transaction> filteredTransactions = // Lista för filterade transaktioner
-                new FilteredList<>(observableTransactions); // Som ovan
+      //  ObservableList<Transaction> observableTransactions =
+               // FXCollections.observableArrayList(DataStore.getTransactions()); // Tar emot datan från klassen DataStore
+       // FilteredList<Transaction> filteredTransactions = // Lista för filterade transaktioner
+              //  new FilteredList<>(observableTransactions); // Som ovan
 
-        ListView<Transaction> transactionListView = new ListView<>(filteredTransactions); // En listview för filterade transaktioner
-        transactionListView.setPrefHeight(300); // Höjden sätts för listview
+       // ListView<Transaction> transactionListView = new ListView<>(filteredTransactions); // En listview för filterade transaktioner
+    //    transactionListView.setPrefHeight(300); // Höjden sätts för listview
 
         // --- Statistik ---
         VBox statsBox = new VBox(8); // En ny Vbox för statistik sätts med 8 i mellanrum
