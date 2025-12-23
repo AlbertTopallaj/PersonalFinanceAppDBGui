@@ -1,5 +1,6 @@
 package se.albert.personalfinanceguidb.models;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class User {
@@ -7,19 +8,23 @@ public class User {
     private UUID id;
     private String username;
     private String password;
+    private Date created_at;
 
-    public User(String username, String password){
+    public User(String username, String password, Date created_at){
 
         this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
+        this.created_at = created_at;
 
     }
 
-    public User(UUID id, String username, String password){
+    public User(UUID id, String username, String password, Date created_at){
+
         this.id = id;
         this.username = username;
         this.password = password;
+        this.created_at = created_at;
 
     }
 

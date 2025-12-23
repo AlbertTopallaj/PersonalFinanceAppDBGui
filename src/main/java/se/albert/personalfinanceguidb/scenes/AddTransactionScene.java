@@ -54,8 +54,8 @@ public class AddTransactionScene { // Klassens namn
 
 
         saveBtn.setOnAction(e -> { // Om man trycker på spara transaktion händer följande
-            try { // Try catch för att hantera fel
-                String type = typeBox.getValue(); // Värdet för vad för typ av transaktion tas emot
+            //try { // Try catch för att hantera fel
+               /* String type = typeBox.getValue(); // Värdet för vad för typ av transaktion tas emot
                 int amount = Integer.parseInt(amountField.getText()); // Värdet för hur mycket kronor transaktionen innehåller tas emot, man parsar int så att det kan bli string
                 LocalDate date = datePicker.getValue(); // Värdet för datum tas emot
                 String description = descriptionField.getText(); // Värdet för beskrivningen tas emot
@@ -69,7 +69,7 @@ public class AddTransactionScene { // Klassens namn
 
             } catch (NumberFormatException ex) { // Om nummerformatet är fel händer följande
                 transactionSaved.setText("Ogiltigt belopp. Ange ett heltal."); // Felmeddelande sätts
-            }
+            } */
         });
 
         backBtn.setOnAction(e -> // Om man trycker på tillbaka knappen händer följande

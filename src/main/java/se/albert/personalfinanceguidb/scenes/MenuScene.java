@@ -30,12 +30,9 @@ public class MenuScene { // Klassens namn
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;"); // Textstorlek och fetmarkerad text sätts
 
 
-        int balance = DataStore.getTransactions() // Variabel för att visa kontobalans sätts
-                .stream() // Allt som strömmar genom AddTransaction tas emot
-                .mapToInt(Transaction::getAmount) // Man tar emot det som går igenom konstruktorn getAmount
-                .sum(); //  Man plusar ihop allting för att se totalen
 
-        Label balanceLabel = new Label("Din kontobalans: " + balance + " kr"); // Balansen sätts i UI
+
+        Label balanceLabel = new Label("Din kontobalans: "+" kr"); // Balansen sätts i UI
         balanceLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"); // Textstorlek sätts, Färgen sätts som fetmarkerad text sätts
 
         // Själva menyn börjar nu

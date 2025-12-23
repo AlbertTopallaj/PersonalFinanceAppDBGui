@@ -13,14 +13,6 @@ public interface ITransactionRepository {
 
     List<Transaction> findAll() throws SQLException;
 
-    List<Transaction> filterByYear() throws SQLException;
-
-    List<Transaction> filterByMonth() throws SQLException;
-
-    List<Transaction> filterByWeek() throws SQLException;
-
-    List<Transaction> filterByDay() throws SQLException;
-
     void save(Transaction transaction) throws SQLException;
 
     void delete(UUID transactionId) throws SQLException;

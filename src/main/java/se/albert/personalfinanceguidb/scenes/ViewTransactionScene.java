@@ -72,10 +72,10 @@ public class ViewTransactionScene { // Klassens namn
         Label yearlySpending = new Label();
 
         Runnable updateStats = () -> { // Möjliggör uppdatering av labels för att visa data
-            dailySpending.setText("Spenderat idag: " + Stats.getDailySum("Spendering") + " kr"); // Sätter text och så att datan visas för samtliga labels
-            weeklyIncome.setText("Inkomst denna vecka: " + Stats.getWeeklySum("Inkomst") + " kr");
-            monthlyAll.setText("Totalt denna månad: " + Stats.getMonthlySum("Alla") + " kr");
-            yearlySpending.setText("Spenderat detta år: " + Stats.getYearlySum("Spendering") + " kr");
+            dailySpending.setText("Spenderat idag: "+ "kr"); // Sätter text och så att datan visas för samtliga labels
+            weeklyIncome.setText("Inkomst denna vecka: " + " kr");
+            monthlyAll.setText("Totalt denna månad: ");
+            yearlySpending.setText("Spenderat detta år: ");
         };
         updateStats.run(); // En funktion som körs för att uppdatera de
 
@@ -84,62 +84,63 @@ public class ViewTransactionScene { // Klassens namn
         // --- Datumfilter logik ---
         dateFilter.setOnAction(e -> { // När man använder dateFilter så händer följande:
             String selectedDate = dateFilter.getValue(); // Det angivna datumet tas emot
-            filteredTransactions.setPredicate(t -> { // Filterade transaktioner listan tar emot datan
+           // filteredTransactions.setPredicate(t -> { // Filterade transaktioner listan tar emot datan
                 LocalDate today = LocalDate.now(); // Dagens datum tas emot
                 switch (selectedDate) { // En switch-case
                     case "Idag": // Om man tar idag
-                        return t.getDate().isEqual(today); // Man ser alla gjorda transaktioner gjorda idag
+                      //  return t.getDate().isEqual(today); // Man ser alla gjorda transaktioner gjorda idag
                     case "Denna vecka": // Om man tar denna vecka
-                        return t.getDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) == // Man ser alla gjorda transaktioner gjorda denna vecka
-                                today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
-                                && t.getDate().getYear() == today.getYear();
+                        //return t.getDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) == // Man ser alla gjorda transaktioner gjorda denna vecka
+                        //        today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
+                      //          && t.getDate().getYear() == today.getYear();
                     case "Denna månad": // Om man tar denna månad
-                        return t.getDate().getMonth() == today.getMonth() // Man ser alla gjorda transaktioner denna månad
-                                && t.getDate().getYear() == today.getYear();
+                        //return t.getDate().getMonth() == today.getMonth() // Man ser alla gjorda transaktioner denna månad
+                          //      && t.getDate().getYear() == today.getYear();
                     case "Detta år": // Om man tar detta år
-                        return t.getDate().getYear() == today.getYear(); // Man ser alla gjorda transaktioner detta år
+                       // return t.getDate().getYear() == today.getYear(); // Man ser alla gjorda transaktioner detta år
                     default: // Om annat avslutas
-                        return true;
+                     //   return true;
                 }
             });
-            updateStats.run(); // Uppdatera listan
-        });
+
+        //});
 
         // --- Typfilter logik ---
-        transactionsTypeFilter.setOnAction(e -> { // Om man använder filtern för olika typer av transaktioner
-            String selectedType = transactionsTypeFilter.getValue(); // Man tar emot det angivna värdet för vilken typ man vill ha
-            filteredTransactions.setPredicate(t -> { // Listan tar emot det
-                if ("Alla".equals(selectedType)) return true; // Om man har alla så syns alla transaktioner
-                return t.getType().equals(selectedType); // Beroende på vilken typ man valt så visas just den typen
-            });
-            updateStats.run(); // Uppdatera listan så att det man vill se syns
-        });
+       // transactionsTypeFilter.setOnAction(e -> { // Om man använder filtern för olika typer av transaktioner
+         //   String selectedType = transactionsTypeFilter.getValue(); // Man tar emot det angivna värdet för vilken typ man vill ha
+          //  filteredTransactions.setPredicate(t -> { // Listan tar emot det
+            //    if ("Alla".equals(selectedType)) return true; // Om man har alla så syns alla transaktioner
+              //  return t.getType().equals(selectedType); // Beroende på vilken typ man valt så visas just den typen
+            //});
+           // updateStats.run(); // Uppdatera listan så att det man vill se syns
+        //});
 
 
         Button deleteBtn = new Button("🗑 Radera vald transaktion"); // Knapp för att radera transaktioner
         deleteBtn.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
         deleteBtn.setOnAction(e -> { // Om man trycker på radera transaktions knappen så händer följande
-            Transaction selected = transactionListView.getSelectionModel().getSelectedItem(); // Man markerar transaktionen
-            if (selected != null) { // Om man har valt en transaktion
-                DataStore.removeTransaction(selected); // Man tillkallar removeTransaction i dataStore
-                observableTransactions.remove(selected); // Man raderar den från listan
+          //  Transaction selected = transactionListView.getSelectionModel().getSelectedItem(); // Man markerar transaktionen
+            //if (selected != null) { // Om man har valt en transaktion
+             //   DataStore.removeTransaction(selected); // Man tillkallar removeTransaction i dataStore
+               // observableTransactions.remove(selected); // Man raderar den från listan
                 updateStats.run(); // Man uppdaterar listan så att den försvinner
-            } else { // Om annat
+            //} else { // Om annat
                 Alert alert = new Alert(Alert.AlertType.WARNING); // En liten popup med varning dyker upp
                 alert.setTitle("Ingen transaktion vald"); // Titeln för varningen sätts
                 alert.setHeaderText(null); // Ingen headertext
                 alert.setContentText("Välj en transaktion att radera."); // Meddelande sätts
                 alert.showAndWait(); // Popupen visas och försvinner när användaren stänger av varningen
-            }
+           // }
         });
+
 
 
         Button backToMenu = new Button("<--- Tillbaka"); // Knapp för att gå tilbaka till Huvudmenyn
         backToMenu.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
-        backToMenu.setOnAction(e -> primaryStage.setScene(new MenuScene().create(primaryStage))); // Om man trycker på knappen skickas man till menyn
+        //backToMenu.setOnAction(e -> primaryStage.setScene(new MenuScene().create(primaryStage))); // Om man trycker på knappen skickas man till menyn
 
         // Lägg ihop
-        root.getChildren().addAll(title, filters, transactionListView, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas
+        root.getChildren().addAll(title, filters, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas
 
         return scene; // Möjliggör för att faktiskt visa sidan
     }
