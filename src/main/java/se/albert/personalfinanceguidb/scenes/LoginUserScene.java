@@ -6,10 +6,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import se.albert.personalfinanceguidb.repositories.IUserRepository;
 
 // Importerade bibliotek och klasser
 
-public class LoginScene { // Klassens namn
+public class LoginUserScene { // Klassens namn
+
+    IUserRepository userRepository;
+
+    public LoginUserScene(IUserRepository userRepository) {
+
+        this.userRepository = userRepository;
+
+    }
 
     public Scene create(Stage primaryStage) { // Metod för att skapa scenen
 
@@ -38,25 +47,29 @@ public class LoginScene { // Klassens namn
         loginButton.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
 
         loginButton.setOnAction(e -> { // Om man trycker på knappen händer följande
-            String user = usernameField.getText(); // Det som skrivits som Användarnamn tas emot
-            String pass = passwordField.getText(); // Det som skrivits som Lösenord tas emot
 
-            if (user.equals("admin") && pass.equals("1234")) { // Om användarnamnet och lösenordet är ett viss värde så händer följande
-                primaryStage.setScene(new MenuScene().create(primaryStage)); // Meny scenen syns
-            } else { // Om annat
-                Alert alert = new Alert(Alert.AlertType.ERROR); // En popup som visar fel dyker upp
-                alert.setTitle("Fel"); // Titeln sätts
-                alert.setHeaderText(null); // Ingen headertext
-                alert.setContentText("Fel lösenord eller användarnamn"); // Felmeddelande
-                alert.showAndWait(); // Visa och vänta tills användaren stänger ner popup
-            }
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+
+
+
         });
+
+        Button goToregisterSceneButton = new Button("Har du inget konto? Registera dig");
+        goToregisterSceneButton.setMaxWidth(Double.MAX_VALUE);
+
+        goToregisterSceneButton.setOnAction(e-> {
+            primaryStage.setScene(new RegisterUserScene(userRepository).create(primaryStage));
+
+        });
+
 
         root.getChildren().addAll( // Tar emot alla delar och lägger in de i root
                 title,
                 userLabel, usernameField,
                 passLabel, passwordField,
-                loginButton
+                loginButton,
+                goToregisterSceneButton
         );
 
         return scene; // Möjliggör för att scenen ska synas

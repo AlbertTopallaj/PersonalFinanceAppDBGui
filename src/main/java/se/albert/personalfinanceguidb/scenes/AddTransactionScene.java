@@ -7,13 +7,29 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.Transaction;
+import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
+import se.albert.personalfinanceguidb.repositories.IUserRepository;
+import se.albert.personalfinanceguidb.repositories.PostgreTransactionRepository;
 
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.UUID;
 
 // Importerade bibliotek och klasser
 
 public class AddTransactionScene { // Klassens namn
+
+    private final IUserRepository userRepository;
+
+    private final ITransactionRepository transactionRepository;
+
+    public AddTransactionScene(IUserRepository userRepository, ITransactionRepository transactionRepository){
+
+        this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository;
+
+    }
 
     public Scene create(Stage primaryStage) { // Metoden för att skapa scenen
         VBox root = new VBox(20); // Root sätts
@@ -25,7 +41,6 @@ public class AddTransactionScene { // Klassens namn
         primaryStage.setWidth(500); // Bredden sätts
         primaryStage.setHeight(700); // Höjden sätts
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
-
 
         Label title = new Label("Lägg till transaktion"); // Rubriken sätts
         title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;"); // Textstorlek samt fetmarkerad text sätts
@@ -54,14 +69,16 @@ public class AddTransactionScene { // Klassens namn
 
 
         saveBtn.setOnAction(e -> { // Om man trycker på spara transaktion händer följande
-            //try { // Try catch för att hantera fel
-               /* String type = typeBox.getValue(); // Värdet för vad för typ av transaktion tas emot
+            try { // Try catch för att hantera fel
+                UUID id = UUID.randomUUID();
+                String type = typeBox.getValue(); // Värdet för vad för typ av transaktion tas emot
                 int amount = Integer.parseInt(amountField.getText()); // Värdet för hur mycket kronor transaktionen innehåller tas emot, man parsar int så att det kan bli string
                 LocalDate date = datePicker.getValue(); // Värdet för datum tas emot
                 String description = descriptionField.getText(); // Värdet för beskrivningen tas emot
 
                 Transaction transaction = new Transaction(id, amount, description, type, date); // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
-                DataStore.addTransaction(transaction); // Transaktionen skickas till DataStore
+                transactionRepository.save(transaction);
+
                 transactionSaved.setText("Transaktion sparad!"); // Text för att bekräfta att transaktionen sparades
                 amountField.clear(); // Tömma samtliga input field
                 descriptionField.clear();
@@ -69,11 +86,16 @@ public class AddTransactionScene { // Klassens namn
 
             } catch (NumberFormatException ex) { // Om nummerformatet är fel händer följande
                 transactionSaved.setText("Ogiltigt belopp. Ange ett heltal."); // Felmeddelande sätts
-            } */
+            }
+            catch (SQLException exception ){
+                System.out.println(exception);
+                exception.printStackTrace();
+
+            }
         });
 
         backBtn.setOnAction(e -> // Om man trycker på tillbaka knappen händer följande
-                primaryStage.setScene(new MenuScene().create(primaryStage)) // Scenen blir Menyn
+                primaryStage.setScene(new MainMenuScene().create(primaryStage)) // Scenen blir Menyn
         );
 
         // Layout

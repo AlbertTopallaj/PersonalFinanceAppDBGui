@@ -7,12 +7,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import se.albert.personalfinanceguidb.models.Transaction;
+import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
+import se.albert.personalfinanceguidb.repositories.IUserRepository;
 
 
 // Importerade bibliotek för UI och andra klasser
 
-public class MenuScene { // Klassens namn
+public class MainMenuScene { // Klassens namn
+
+    ITransactionRepository transactionRepository;
+    IUserRepository userRepository;
 
     public Scene create(Stage primaryStage) { // Metoden för att skapa scenen
         VBox root = new VBox(20); // Root sätts
@@ -30,8 +34,6 @@ public class MenuScene { // Klassens namn
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;"); // Textstorlek och fetmarkerad text sätts
 
 
-
-
         Label balanceLabel = new Label("Din kontobalans: "+" kr"); // Balansen sätts i UI
         balanceLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"); // Textstorlek sätts, Färgen sätts som fetmarkerad text sätts
 
@@ -39,7 +41,7 @@ public class MenuScene { // Klassens namn
         Button addTransaction = new Button("Lägg till en ny transaktion"); // Knapp för att gå in till AddTransactionScene
         addTransaction.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
         addTransaction.setOnAction(e -> // Om man trycker på knappen händer följande
-                primaryStage.setScene(new AddTransactionScene().create(primaryStage)) // Man sätter scenen till AddTransactionScene
+                primaryStage.setScene(new AddTransactionScene(userRepository, transactionRepository).create(primaryStage)) // Man sätter scenen till AddTransactionScene
         );
 
         Button viewTransactions = new Button("Visa transaktioner"); // Knapp för att gå in till ViewTransactionsScene

@@ -97,8 +97,6 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setDate(5, (Date) transaction.getDate());
 
 
-            preparedStatement.executeUpdate();
-
         } catch (Exception e){
             System.out.println("Something went wrong ;( ");
             e.printStackTrace();
@@ -117,7 +115,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
             preparedStatement.executeUpdate();
 
-        }
+          }
 
         }
 

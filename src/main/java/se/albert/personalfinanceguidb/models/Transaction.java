@@ -24,6 +24,15 @@ public class Transaction { // Klassens namn
 
     }
 
+    public Transaction(UUID id, int amount, String description, String type, LocalDate date) {
+
+        this.id = id;
+        this.description = description;
+        this.amount = amount;
+        this.type = type;
+
+    }
+
     public UUID getId() {
         return id;
     }

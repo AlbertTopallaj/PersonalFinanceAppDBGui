@@ -10,22 +10,31 @@ public class User {
     private String password;
     private Date created_at;
 
-    public User(String username, String password, Date created_at){
+    public User(UUID id, String username, String password, Date created_at){
 
         this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
-        this.created_at = created_at;
+        this.created_at = new Date();
 
     }
 
-    public User(UUID id, String username, String password, Date created_at){
+    public User(String username, String password){
 
-        this.id = id;
+        this.id = UUID.randomUUID();
+        this.created_at = new Date();
         this.username = username;
         this.password = password;
-        this.created_at = created_at;
 
+    }
+
+
+    public Date getCreated_at(){
+        return created_at;
+    }
+
+    public void setCreated_at(){
+        this.created_at = created_at;
     }
 
     public UUID getId() {
