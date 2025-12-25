@@ -18,6 +18,7 @@ public class Main extends Application {  // Main klassen, vad som ska köras
 
     @Override
     public void start(Stage primaryStage) throws SQLException { // Metoden som ska köras när appen startas
+
         String dbUrl = System.getenv("DATABASE_URL");
         String dbUser = System.getenv("DATABASE_USER");
         String dbPassword = System.getenv("DATABASE_PASSWORD");

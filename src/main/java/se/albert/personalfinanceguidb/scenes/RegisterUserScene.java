@@ -46,9 +46,9 @@ public class RegisterUserScene {// Klassens namn
 
         Label validatePassLabel = new Label("Lösenord:"); // Label för Lösenord
         PasswordField validatePasswordField = new PasswordField(); // Användaren kan skriva sitt lösenörd här
-        passwordField.setPromptText("Upprepa ditt lösenord"); // Detta står i textfield för att användaren ska veta vad som ska göras
+        validatePasswordField.setPromptText("Upprepa ditt lösenord"); // Detta står i textfield för att användaren ska veta vad som ska göras
 
-        Button registerButton = new Button("Logga in"); // Knappen för att logga in
+        Button registerButton = new Button("Registera"); // Knappen för att logga in
         registerButton.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
 
         registerButton.setOnAction(e -> { // Om man trycker på knappen händer följande
@@ -57,8 +57,59 @@ public class RegisterUserScene {// Klassens namn
                 String username = usernameField.getText();
                 String password = passwordField.getText();
 
+                if (password.length() < 5) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Ditt lösenord är för kort!");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Lösenordet är för kort, det måste vara längre än 5 tecken");
+                    alert.showAndWait();
+                    return;
+
+                }
+
+                if (password.isBlank() || password == null) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Du måste ange ett lösenord");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Inget lösenord har angivits");
+                    alert.showAndWait();
+                    return;
+
+                }
+
+                if (username.isBlank() || username == null){
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Du måste ange ett användarnamn");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Inget användarnamn har angivits");
+                    alert.showAndWait();
+                    return;
+
+                }
+
+                if (username.length() < 5){
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Ditt användarnamn är för kort!");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Användarnamnet är för kort, det måste vara längre än 5 tecken");
+                    alert.showAndWait();
+                    return;
+                }
+
                 User user = new User(username, password);
                 userRepository.save(user);
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Registering lyckades");
+                alert.setHeaderText("Välkommen");
+                alert.setContentText("Registeringen lyckades!");
+                alert.showAndWait();
+
+                primaryStage.setScene(new MainMenuScene().create(primaryStage));
+
 
             } catch (Exception exception){
                 exception.printStackTrace();

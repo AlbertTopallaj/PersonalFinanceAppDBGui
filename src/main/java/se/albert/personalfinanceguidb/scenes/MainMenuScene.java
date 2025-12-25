@@ -30,7 +30,9 @@ public class MainMenuScene { // Klassens namn
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
 
-        Label title = new Label("Huvudmeny"); // Rubriken för sidan sätts
+        String username = userRepository.findByUsername()
+
+        Label title = new Label("Välkommen " + username); // Rubriken för sidan sätts
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;"); // Textstorlek och fetmarkerad text sätts
 
 

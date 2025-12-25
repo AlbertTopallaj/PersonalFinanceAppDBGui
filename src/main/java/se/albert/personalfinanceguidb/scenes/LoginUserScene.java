@@ -51,7 +51,13 @@ public class LoginUserScene { // Klassens namn
             String username = usernameField.getText();
             String password = passwordField.getText();
 
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Inloggning lyckades");
+            alert.setHeaderText("Välkommen");
+            alert.setContentText("Inloggning lyckades");
+            alert.showAndWait();
 
+            primaryStage.setScene(new MainMenuScene().create(primaryStage));
 
         });
 

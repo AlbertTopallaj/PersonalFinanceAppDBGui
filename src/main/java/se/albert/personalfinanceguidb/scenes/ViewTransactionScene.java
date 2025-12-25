@@ -137,7 +137,7 @@ public class ViewTransactionScene { // Klassens namn
 
         Button backToMenu = new Button("<--- Tillbaka"); // Knapp för att gå tilbaka till Huvudmenyn
         backToMenu.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
-        //backToMenu.setOnAction(e -> primaryStage.setScene(new MenuScene().create(primaryStage))); // Om man trycker på knappen skickas man till menyn
+        backToMenu.setOnAction(e -> primaryStage.setScene(new MainMenuScene().create(primaryStage))); // Om man trycker på knappen skickas man till menyn
 
         // Lägg ihop
         root.getChildren().addAll(title, filters, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas
