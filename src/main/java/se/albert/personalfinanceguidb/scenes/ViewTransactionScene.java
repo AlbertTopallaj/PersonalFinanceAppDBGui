@@ -85,10 +85,26 @@ public class ViewTransactionScene { // Klassens namn
         Label yearlySpending = new Label();
 
         Runnable updateStats = () -> { // Möjliggör uppdatering av labels för att visa data
-            dailySpending.setText("Spenderat idag: "+ "kr"); // Sätter text och så att datan visas för samtliga labels
-            weeklyIncome.setText("Inkomst denna vecka: " + " kr");
-            monthlyAll.setText("Totalt denna månad: ");
-            yearlySpending.setText("Spenderat detta år: ");
+            try {
+                dailySpending.setText("Spenderat idag: "+ transactionRepository.getDailyExpense("Spendering")); // Sätter text och så att datan visas för samtliga labels
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                weeklyIncome.setText("Inkomst denna vecka: "+ transactionRepository.getWeeklyIncome("Inkomst"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                monthlyAll.setText("Totalt denna månad: " + transactionRepository.getMonthlyIncome("Inkomst"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                yearlySpending.setText("Spenderat detta år: " + transactionRepository.getYearlyExpense("Spendering"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         };
         updateStats.run(); // En funktion som körs för att uppdatera de
 

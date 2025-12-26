@@ -17,4 +17,24 @@ public interface ITransactionRepository {
 
     void delete(UUID transactionId) throws SQLException;
 
+    int getTotalIncome(String type) throws Exception;
+
+    int getTotalExpense(String type) throws Exception;
+
+    int getDailyIncome(String type) throws Exception;
+
+    int getWeeklyIncome(String type) throws Exception;
+
+    int getMonthlyIncome(String type) throws Exception;
+
+    int getYearlyIncome(String type) throws Exception;
+
+    int getDailyExpense(String type) throws Exception;
+
+    int getWeeklyExpense(String type) throws Exception;
+
+    int getMonthlyExpense(String type) throws Exception;
+
+    int getYearlyExpense(String type) throws Exception;
+
 }

@@ -38,9 +38,8 @@ public class LoginUserScene { // Klassens namn
 
         Scene scene = new Scene(root, 400, 300); // Scenen skapas
 
-     //   primaryStage.setWidth(500); // Bredden sätts
-       // primaryStage.setHeight(700); // Höjden sätts
-        primaryStage.setFullScreen(true);
+        primaryStage.setWidth(500); // Bredden sätts
+        primaryStage.setHeight(700); // Höjden sätts
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
         Label title = new Label(" Logga in"); // Rubriken sätts för sidan

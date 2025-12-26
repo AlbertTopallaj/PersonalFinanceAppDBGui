@@ -16,11 +16,11 @@ public class Transaction { // Klassens namn
 
     public Transaction(UUID id, String description, int amount, String type, Timestamp date) {
 
-        this.id = UUID.randomUUID();
+        this.id = id;
         this.description = description;
         this.amount = amount;
         this.type = type;
-        this.created_at = created_at;
+        this.created_at = date;
 
     }
 

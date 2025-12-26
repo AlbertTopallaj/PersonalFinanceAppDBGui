@@ -7,6 +7,7 @@ import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
                     "description TEXT," +
                     "amount INT," +
                     "type TEXT," +
-                    "created_at TIMESTAMP)");
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
         }
 
     }
@@ -120,5 +121,136 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
         }
 
+    @Override
+    public int getTotalIncome(String type) throws Exception {
+        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ?";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        }
     }
+
+    @Override
+    public int getTotalExpense(String type) throws Exception {
+        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+
+        }
+    }
+
+    @Override
+    public int getDailyIncome(String type) throws Exception {
+        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        }
+    }
+
+    @Override
+    public int getWeeklyIncome(String type) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        }
+    }
+
+    @Override
+    public int getMonthlyIncome(String type) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            return resultSet.getInt(1);
+        }
+    }
+
+    @Override
+    public int getYearlyIncome(String type) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            return resultSet.getInt(1);
+        }
+    }
+
+    @Override
+    public int getDailyExpense(String type) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            return resultSet.getInt(1);
+        }
+    }
+
+    @Override
+    public int getWeeklyExpense(String type) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        }
+    }
+
+    @Override
+    public int getMonthlyExpense(String type) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            return resultSet.getInt(1);
+        }
+    }
+
+    @Override
+    public int getYearlyExpense(String type) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, type);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            return resultSet.getInt(1);
+        }
+    }
+
+}
 
