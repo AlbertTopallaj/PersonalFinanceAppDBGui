@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.User;
+import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.repositories.PostgreUserRepository;
 
@@ -15,10 +16,12 @@ import se.albert.personalfinanceguidb.repositories.PostgreUserRepository;
 public class RegisterUserScene {// Klassens namn
 
     private final IUserRepository userRepository;
+    private final ITransactionRepository transactionRepository;
 
-    public RegisterUserScene(IUserRepository userRepository){
+    public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository){
 
         this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository;
 
     }
     public Scene create(Stage primaryStage) { // Metod för att skapa scenen
@@ -108,7 +111,7 @@ public class RegisterUserScene {// Klassens namn
                 alert.setContentText("Registeringen lyckades!");
                 alert.showAndWait();
 
-                primaryStage.setScene(new MainMenuScene().create(primaryStage));
+                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage));
 
 
             } catch (Exception exception){

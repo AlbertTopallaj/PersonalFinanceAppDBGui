@@ -6,17 +6,27 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import se.albert.personalfinanceguidb.models.User;
+import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
+import se.albert.personalfinanceguidb.services.AuthService;
+import se.albert.personalfinanceguidb.services.IUserService;
+
+import java.util.Optional;
 
 // Importerade bibliotek och klasser
 
 public class LoginUserScene { // Klassens namn
 
+    ITransactionRepository transactionRepository;
     IUserRepository userRepository;
+    IUserService userService;
 
-    public LoginUserScene(IUserRepository userRepository) {
+    public LoginUserScene(IUserRepository userRepository, IUserService userService, ITransactionRepository transactionRepository) {
 
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.transactionRepository = transactionRepository;
 
     }
 
@@ -48,16 +58,47 @@ public class LoginUserScene { // Klassens namn
 
         loginButton.setOnAction(e -> { // Om man trycker på knappen händer följande
 
+            System.out.println("knapp tryckt");
+
             String username = usernameField.getText();
             String password = passwordField.getText();
 
+            Optional<User> optional;
+
+
+
+            try {
+                optional = userService.checkUserLogin(username, password);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Fel vid login: " + ex.getMessage());
+                alert.showAndWait();
+                return;
+            }
+
+
+            System.out.println("passerat del 1");
+
+            if (optional.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("fel 2 ;(");
+                alert.showAndWait();
+                return;
+            }
+
+            User user = optional.get();
+            AuthService.setUserID(user.getId());
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Inloggning lyckades");
-            alert.setHeaderText("Välkommen");
+            alert.setHeaderText("Välkommen " + user.getUsername());
             alert.setContentText("Inloggning lyckades");
             alert.showAndWait();
 
-            primaryStage.setScene(new MainMenuScene().create(primaryStage));
+            System.out.println("kommer hit?");
+
+            primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage));
 
         });
 
@@ -65,7 +106,7 @@ public class LoginUserScene { // Klassens namn
         goToregisterSceneButton.setMaxWidth(Double.MAX_VALUE);
 
         goToregisterSceneButton.setOnAction(e-> {
-            primaryStage.setScene(new RegisterUserScene(userRepository).create(primaryStage));
+            primaryStage.setScene(new RegisterUserScene(userRepository, transactionRepository).create(primaryStage));
 
         });
 

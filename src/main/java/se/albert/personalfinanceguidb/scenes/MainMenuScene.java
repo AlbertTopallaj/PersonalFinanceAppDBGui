@@ -7,16 +7,27 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
+
+import java.util.Optional;
 
 
 // Importerade bibliotek för UI och andra klasser
 
 public class MainMenuScene { // Klassens namn
 
-    ITransactionRepository transactionRepository;
-    IUserRepository userRepository;
+    private final ITransactionRepository transactionRepository;
+    private final IUserRepository userRepository;
+
+    public MainMenuScene(IUserRepository userRepository, ITransactionRepository transactionRepository){
+
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
+
+    }
+
 
     public Scene create(Stage primaryStage) { // Metoden för att skapa scenen
         VBox root = new VBox(20); // Root sätts
@@ -30,9 +41,8 @@ public class MainMenuScene { // Klassens namn
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
 
-        String username = userRepository.findByUsername()
 
-        Label title = new Label("Välkommen " + username); // Rubriken för sidan sätts
+        Label title = new Label("Välkommen " ); // Rubriken för sidan sätts
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;"); // Textstorlek och fetmarkerad text sätts
 
 
@@ -49,7 +59,7 @@ public class MainMenuScene { // Klassens namn
         Button viewTransactions = new Button("Visa transaktioner"); // Knapp för att gå in till ViewTransactionsScene
         viewTransactions.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
         viewTransactions.setOnAction(e -> // Om man trycker på knappen händer följande
-                primaryStage.setScene(new ViewTransactionScene().create(primaryStage)) // Man sätter scenen till ViewTransactionsScene
+                primaryStage.setScene(new ViewTransactionScene(transactionRepository, userRepository).create(primaryStage)) // Man sätter scenen till ViewTransactionsScene
         );
 
         Button quit = new Button("Stäng av programmet"); // Knapp för att stänga av programmet

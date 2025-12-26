@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.Transaction;
+import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
+import se.albert.personalfinanceguidb.repositories.IUserRepository;
 
 
 import java.time.LocalDate;
@@ -18,6 +20,15 @@ import java.time.temporal.IsoFields;
 // Importerade bibiliotek och andra klasser
 
 public class ViewTransactionScene { // Klassens namn
+
+    private final ITransactionRepository transactionRepository;
+    private final IUserRepository userRepository;
+
+    public ViewTransactionScene(ITransactionRepository transactionRepository, IUserRepository userRepository){
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
+    }
+
 
     public Scene create(Stage primaryStage) { // Metoden för scenen, stage är primaryStage
 
@@ -137,7 +148,7 @@ public class ViewTransactionScene { // Klassens namn
 
         Button backToMenu = new Button("<--- Tillbaka"); // Knapp för att gå tilbaka till Huvudmenyn
         backToMenu.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
-        backToMenu.setOnAction(e -> primaryStage.setScene(new MainMenuScene().create(primaryStage))); // Om man trycker på knappen skickas man till menyn
+        backToMenu.setOnAction(e -> primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage))); // Om man trycker på knappen skickas man till menyn
 
         // Lägg ihop
         root.getChildren().addAll(title, filters, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas

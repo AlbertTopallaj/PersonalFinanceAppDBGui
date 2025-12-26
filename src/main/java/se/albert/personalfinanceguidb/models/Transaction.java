@@ -12,7 +12,7 @@ public class Transaction { // Klassens namn
     private int amount; // En konstruktor för alla delar för en transaction, första är värdet i kronor
     private String description; // Beskrivningen
     private String type; // Typen av transaktion
-    private Date created_at; // Datumet
+    private Timestamp created_at; // Datumet
 
     public Transaction(UUID id, String description, int amount, String type, Timestamp date) {
 
@@ -30,6 +30,7 @@ public class Transaction { // Klassens namn
         this.description = description;
         this.amount = amount;
         this.type = type;
+        this.created_at = Timestamp.valueOf(date.atStartOfDay());
 
     }
 
@@ -44,7 +45,7 @@ public class Transaction { // Klassens namn
     public int getAmount() { return amount; } // Getter, returnerar värden.
     public String getDescription() { return description; }
     public String getType() { return type; }
-    public Date getDate() { return created_at; }
+    public Timestamp getDate() { return created_at; }
 
 
     public String toString(){ // Metod för att visa hur det ska skickas ut i listan

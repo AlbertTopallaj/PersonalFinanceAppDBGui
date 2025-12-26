@@ -43,11 +43,10 @@ public class PostgreUserRepository implements IUserRepository {
             Timestamp createdAt = set.getTimestamp("created_At");
 
             User user = new User(id, username, password, createdAt);
-
+            return Optional.of(user);
 
         }
 
-        return Optional.empty();
     }
 
     @Override

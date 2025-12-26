@@ -25,8 +25,8 @@ public class PostgreTransactionRepository implements ITransactionRepository {
                     "id UUID PRIMARY KEY," +
                     "description TEXT," +
                     "amount INT," +
-                    "type, TEXT," +
-                    "created_at TIMESTAMP,");
+                    "type TEXT," +
+                    "created_at TIMESTAMP)");
         }
 
     }
@@ -94,7 +94,9 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setString(2, transaction.getDescription());
             preparedStatement.setInt(3, transaction.getAmount());
             preparedStatement.setString(4, transaction.getType());
-            preparedStatement.setDate(5, (Date) transaction.getDate());
+            preparedStatement.setTimestamp(5, transaction.getDate());
+
+            preparedStatement.executeUpdate();
 
 
         } catch (Exception e){

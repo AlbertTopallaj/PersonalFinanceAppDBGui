@@ -38,7 +38,6 @@ public class DefaultUserService implements IUserService {
 
     @Override
     public Optional<User> checkUserLogin(String username, String password) throws Exception {
-
         Optional<User> optional;
         try {
             optional = userRepository.findByUsername(username);

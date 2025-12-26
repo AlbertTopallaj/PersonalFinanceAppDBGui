@@ -95,7 +95,7 @@ public class AddTransactionScene { // Klassens namn
         });
 
         backBtn.setOnAction(e -> // Om man trycker på tillbaka knappen händer följande
-                primaryStage.setScene(new MainMenuScene().create(primaryStage)) // Scenen blir Menyn
+                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage)) // Scenen blir Menyn
         );
 
         // Layout
