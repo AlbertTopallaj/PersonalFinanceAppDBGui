@@ -11,6 +11,7 @@ import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 
@@ -59,7 +60,13 @@ public class MainMenuScene { // Klassens namn
         Button viewTransactions = new Button("Visa transaktioner"); // Knapp för att gå in till ViewTransactionsScene
         viewTransactions.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
         viewTransactions.setOnAction(e -> // Om man trycker på knappen händer följande
-                primaryStage.setScene(new ViewTransactionScene(transactionRepository, userRepository).create(primaryStage)) // Man sätter scenen till ViewTransactionsScene
+                {
+                    try {
+                        primaryStage.setScene(new ViewTransactionScene(transactionRepository, userRepository).create(primaryStage));
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } // Man sätter scenen till ViewTransactionsScene
         );
 
         Button quit = new Button("Stäng av programmet"); // Knapp för att stänga av programmet

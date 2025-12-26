@@ -75,7 +75,6 @@ public class PostgreTransactionRepository implements ITransactionRepository {
                 Transaction transaction = new Transaction(id, description, amount, type, date);
                 transactions.add(transaction);
 
-
             }
 
         }

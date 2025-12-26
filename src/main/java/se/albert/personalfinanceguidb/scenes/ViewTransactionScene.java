@@ -14,8 +14,10 @@ import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
+import java.util.List;
 
 // Importerade bibiliotek och andra klasser
 
@@ -29,8 +31,7 @@ public class ViewTransactionScene { // Klassens namn
         this.userRepository = userRepository;
     }
 
-
-    public Scene create(Stage primaryStage) { // Metoden för scenen, stage är primaryStage
+    public Scene create(Stage primaryStage) throws SQLException { // Metoden för scenen, stage är primaryStage
 
         VBox root = new VBox(20); // Root skapas
         root.setPadding(new Insets(20)); // Ger mellanrum
@@ -62,13 +63,14 @@ public class ViewTransactionScene { // Klassens namn
                 new Label("Datum:"), dateFilter); // Typ och datum
 
         // Här kommer själva listan av data, när en användare skickar in en ny transaktion skickas till hit och sparas tillfälligt i listan
-      //  ObservableList<Transaction> observableTransactions =
-               // FXCollections.observableArrayList(DataStore.getTransactions()); // Tar emot datan från klassen DataStore
-       // FilteredList<Transaction> filteredTransactions = // Lista för filterade transaktioner
-              //  new FilteredList<>(observableTransactions); // Som ovan
+        List<Transaction> transactionList = transactionRepository.findAll();
+      ObservableList<Transaction> observableTransactions =
+               FXCollections.observableArrayList(transactionList); // Tar emot datan från klassen DataStore
+       FilteredList<Transaction> filteredTransactions = // Lista för filterade transaktioner
+              new FilteredList<>(observableTransactions); // Som ovan
 
-       // ListView<Transaction> transactionListView = new ListView<>(filteredTransactions); // En listview för filterade transaktioner
-    //    transactionListView.setPrefHeight(300); // Höjden sätts för listview
+       ListView<Transaction> transactionListView = new ListView<>(filteredTransactions); // En listview för filterade transaktioner
+       transactionListView.setPrefHeight(300); // Höjden sätts för listview
 
         // --- Statistik ---
         VBox statsBox = new VBox(8); // En ny Vbox för statistik sätts med 8 i mellanrum
@@ -95,63 +97,71 @@ public class ViewTransactionScene { // Klassens namn
         // --- Datumfilter logik ---
         dateFilter.setOnAction(e -> { // När man använder dateFilter så händer följande:
             String selectedDate = dateFilter.getValue(); // Det angivna datumet tas emot
-           // filteredTransactions.setPredicate(t -> { // Filterade transaktioner listan tar emot datan
+            filteredTransactions.setPredicate(t -> { // Filterade transaktioner listan tar emot datan
                 LocalDate today = LocalDate.now(); // Dagens datum tas emot
+                LocalDate transactionDate = t.getDate().toLocalDateTime().toLocalDate();
+
                 switch (selectedDate) { // En switch-case
                     case "Idag": // Om man tar idag
-                      //  return t.getDate().isEqual(today); // Man ser alla gjorda transaktioner gjorda idag
+                      return transactionDate.equals(today); // Man ser alla gjorda transaktioner gjorda idag
                     case "Denna vecka": // Om man tar denna vecka
-                        //return t.getDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) == // Man ser alla gjorda transaktioner gjorda denna vecka
-                        //        today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
-                      //          && t.getDate().getYear() == today.getYear();
+                        return transactionDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) == // Man ser alla gjorda transaktioner gjorda denna vecka
+                        today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
+                         && transactionDate.getYear() == today.getYear();
                     case "Denna månad": // Om man tar denna månad
-                        //return t.getDate().getMonth() == today.getMonth() // Man ser alla gjorda transaktioner denna månad
-                          //      && t.getDate().getYear() == today.getYear();
+                        return transactionDate.getMonth() == today.getMonth() // Man ser alla gjorda transaktioner denna månad
+                           && transactionDate.getYear() == today.getYear();
                     case "Detta år": // Om man tar detta år
-                       // return t.getDate().getYear() == today.getYear(); // Man ser alla gjorda transaktioner detta år
+                        return transactionDate.getYear() == today.getYear(); // Man ser alla gjorda transaktioner detta år
                     default: // Om annat avslutas
-                     //   return true;
+                       return true;
                 }
             });
 
-        //});
+        });
 
         // --- Typfilter logik ---
-       // transactionsTypeFilter.setOnAction(e -> { // Om man använder filtern för olika typer av transaktioner
-         //   String selectedType = transactionsTypeFilter.getValue(); // Man tar emot det angivna värdet för vilken typ man vill ha
-          //  filteredTransactions.setPredicate(t -> { // Listan tar emot det
-            //    if ("Alla".equals(selectedType)) return true; // Om man har alla så syns alla transaktioner
-              //  return t.getType().equals(selectedType); // Beroende på vilken typ man valt så visas just den typen
-            //});
-           // updateStats.run(); // Uppdatera listan så att det man vill se syns
-        //});
+       transactionsTypeFilter.setOnAction(e -> { // Om man använder filtern för olika typer av transaktioner
+           String selectedType = transactionsTypeFilter.getValue(); // Man tar emot det angivna värdet för vilken typ man vill ha
+          filteredTransactions.setPredicate(t -> { // Listan tar emot det
+            if ("Alla".equals(selectedType)) return true; // Om man har alla så syns alla transaktioner
+              return t.getType().equals(selectedType); // Beroende på vilken typ man valt så visas just den typen
+            });
+            updateStats.run(); // Uppdatera listan så att det man vill se syns
+        });
 
 
         Button deleteBtn = new Button("🗑 Radera vald transaktion"); // Knapp för att radera transaktioner
         deleteBtn.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
         deleteBtn.setOnAction(e -> { // Om man trycker på radera transaktions knappen så händer följande
-          //  Transaction selected = transactionListView.getSelectionModel().getSelectedItem(); // Man markerar transaktionen
-            //if (selected != null) { // Om man har valt en transaktion
-             //   DataStore.removeTransaction(selected); // Man tillkallar removeTransaction i dataStore
-               // observableTransactions.remove(selected); // Man raderar den från listan
+          Transaction selected = transactionListView.getSelectionModel().getSelectedItem(); // Man markerar transaktionen
+            if (selected != null) { // Om man har valt en transaktion
+                try {
+                    transactionRepository.delete(selected.getId()); // Man tillkallar removeTransaction i dataStore
+                    observableTransactions.remove(selected); // Man raderar den från listan
+                    updateStats.run();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setContentText("Transaktion raderad.");
+                    alert.showAndWait();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 updateStats.run(); // Man uppdaterar listan så att den försvinner
-            //} else { // Om annat
+            } else { // Om annat
                 Alert alert = new Alert(Alert.AlertType.WARNING); // En liten popup med varning dyker upp
                 alert.setTitle("Ingen transaktion vald"); // Titeln för varningen sätts
                 alert.setHeaderText(null); // Ingen headertext
                 alert.setContentText("Välj en transaktion att radera."); // Meddelande sätts
                 alert.showAndWait(); // Popupen visas och försvinner när användaren stänger av varningen
-           // }
+            }
         });
-
-
 
         Button backToMenu = new Button("<--- Tillbaka"); // Knapp för att gå tilbaka till Huvudmenyn
         backToMenu.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
         backToMenu.setOnAction(e -> primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage))); // Om man trycker på knappen skickas man till menyn
 
         // Lägg ihop
-        root.getChildren().addAll(title, filters, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas
+        root.getChildren().addAll(title, filters, transactionListView, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas
 
         return scene; // Möjliggör för att faktiskt visa sidan
     }
