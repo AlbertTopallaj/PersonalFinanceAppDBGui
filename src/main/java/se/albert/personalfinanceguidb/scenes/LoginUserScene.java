@@ -18,9 +18,9 @@ import java.util.Optional;
 
 public class LoginUserScene { // Klassens namn
 
-    ITransactionRepository transactionRepository;
-    IUserRepository userRepository;
-    IUserService userService;
+    private final ITransactionRepository transactionRepository;
+    private final IUserRepository userRepository;
+    private final IUserService userService;
 
     public LoginUserScene(IUserRepository userRepository, IUserService userService, ITransactionRepository transactionRepository) {
 
@@ -98,7 +98,7 @@ public class LoginUserScene { // Klassens namn
 
             System.out.println("kommer hit?");
 
-            primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage));
+            primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, userService).create(primaryStage));
 
         });
 

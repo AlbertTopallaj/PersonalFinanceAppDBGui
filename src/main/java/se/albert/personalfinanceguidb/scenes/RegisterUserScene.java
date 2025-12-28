@@ -10,6 +10,7 @@ import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.repositories.PostgreUserRepository;
+import se.albert.personalfinanceguidb.services.IUserService;
 
 // Importerade bibliotek och klasser
 
@@ -17,6 +18,7 @@ public class RegisterUserScene {// Klassens namn
 
     private final IUserRepository userRepository;
     private final ITransactionRepository transactionRepository;
+    private IUserService userService;
 
     public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository){
 
@@ -53,6 +55,15 @@ public class RegisterUserScene {// Klassens namn
 
         Button registerButton = new Button("Registera"); // Knappen för att logga in
         registerButton.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
+
+        Button login = new Button("Har du redan ett konto? Logga in");
+        login.setMaxWidth(Double.MAX_VALUE);
+
+        login.setOnAction(e -> {
+
+            primaryStage.setScene(new LoginUserScene(userRepository, userService, transactionRepository).create(primaryStage));
+
+        });
 
         registerButton.setOnAction(e -> { // Om man trycker på knappen händer följande
 
@@ -111,7 +122,7 @@ public class RegisterUserScene {// Klassens namn
                 alert.setContentText("Registeringen lyckades!");
                 alert.showAndWait();
 
-                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage));
+                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, userService).create(primaryStage));
 
 
             } catch (Exception exception){
@@ -124,7 +135,8 @@ public class RegisterUserScene {// Klassens namn
                 title,
                 userLabel, usernameField,
                 passLabel, passwordField,
-                registerButton
+                registerButton,
+                login
         );
 
         return scene; // Möjliggör för att scenen ska synas

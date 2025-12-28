@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
+import se.albert.personalfinanceguidb.services.IUserService;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -21,11 +22,13 @@ public class MainMenuScene { // Klassens namn
 
     private final ITransactionRepository transactionRepository;
     private final IUserRepository userRepository;
+    private final IUserService userService;
 
-    public MainMenuScene(IUserRepository userRepository, ITransactionRepository transactionRepository){
+    public MainMenuScene(IUserRepository userRepository, ITransactionRepository transactionRepository, IUserService userService){
 
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
 
     }
 
@@ -54,7 +57,7 @@ public class MainMenuScene { // Klassens namn
         Button addTransaction = new Button("Lägg till en ny transaktion"); // Knapp för att gå in till AddTransactionScene
         addTransaction.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
         addTransaction.setOnAction(e -> // Om man trycker på knappen händer följande
-                primaryStage.setScene(new AddTransactionScene(userRepository, transactionRepository).create(primaryStage)) // Man sätter scenen till AddTransactionScene
+                primaryStage.setScene(new AddTransactionScene(userRepository, transactionRepository, userService).create(primaryStage)) // Man sätter scenen till AddTransactionScene
         );
 
         Button viewTransactions = new Button("Visa transaktioner"); // Knapp för att gå in till ViewTransactionsScene
@@ -62,11 +65,20 @@ public class MainMenuScene { // Klassens namn
         viewTransactions.setOnAction(e -> // Om man trycker på knappen händer följande
                 {
                     try {
-                        primaryStage.setScene(new ViewTransactionScene(transactionRepository, userRepository).create(primaryStage));
+                        primaryStage.setScene(new ViewTransactionScene(transactionRepository, userRepository, userService).create(primaryStage));
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
                 } // Man sätter scenen till ViewTransactionsScene
+        );
+
+        Button logout = new Button("Logga ut ur systemet");
+        logout.setMaxWidth(Double.MAX_VALUE);
+        logout.setOnAction(e ->
+
+                {
+                    primaryStage.setScene(new LoginUserScene(userRepository, userService, transactionRepository).create(primaryStage));
+                }
         );
 
         Button quit = new Button("Stäng av programmet"); // Knapp för att stänga av programmet
@@ -78,6 +90,7 @@ public class MainMenuScene { // Klassens namn
                 balanceLabel,
                 addTransaction,
                 viewTransactions,
+                logout,
                 quit
         );
 

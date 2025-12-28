@@ -13,6 +13,7 @@ import se.albert.personalfinanceguidb.models.Transaction;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.services.AuthService;
+import se.albert.personalfinanceguidb.services.IUserService;
 
 
 import java.sql.SQLException;
@@ -27,10 +28,12 @@ public class ViewTransactionScene { // Klassens namn
 
     private final ITransactionRepository transactionRepository;
     private final IUserRepository userRepository;
+    private final IUserService userService;
 
-    public ViewTransactionScene(ITransactionRepository transactionRepository, IUserRepository userRepository){
+    public ViewTransactionScene(ITransactionRepository transactionRepository, IUserRepository userRepository, IUserService userService){
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public Scene create(Stage primaryStage) throws SQLException { // Metoden för scenen, stage är primaryStage
@@ -179,7 +182,7 @@ public class ViewTransactionScene { // Klassens namn
 
         Button backToMenu = new Button("<--- Tillbaka"); // Knapp för att gå tilbaka till Huvudmenyn
         backToMenu.setMaxWidth(Double.MAX_VALUE); // Bredden sätts med dubbla max värdet
-        backToMenu.setOnAction(e -> primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage))); // Om man trycker på knappen skickas man till menyn
+        backToMenu.setOnAction(e -> primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, userService).create(primaryStage))); // Om man trycker på knappen skickas man till menyn
 
         // Lägg ihop
         root.getChildren().addAll(title, filters, transactionListView, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas

@@ -11,6 +11,7 @@ import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.repositories.PostgreTransactionRepository;
 import se.albert.personalfinanceguidb.services.AuthService;
+import se.albert.personalfinanceguidb.services.IUserService;
 
 
 import java.sql.SQLException;
@@ -25,10 +26,13 @@ public class AddTransactionScene { // Klassens namn
 
     private final ITransactionRepository transactionRepository;
 
-    public AddTransactionScene(IUserRepository userRepository, ITransactionRepository transactionRepository){
+    private final IUserService userService;
+
+    public AddTransactionScene(IUserRepository userRepository, ITransactionRepository transactionRepository, IUserService userService){
 
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.userService = userService;
 
     }
 
@@ -101,7 +105,7 @@ public class AddTransactionScene { // Klassens namn
         });
 
         backBtn.setOnAction(e -> // Om man trycker på tillbaka knappen händer följande
-                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository).create(primaryStage)) // Scenen blir Menyn
+                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, userService).create(primaryStage)) // Scenen blir Menyn
         );
 
         // Layout
