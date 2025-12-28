@@ -51,7 +51,11 @@ public class DefaultUserService implements IUserService {
 
         User user = optional.get();
 
-        return Optional.of(user);
+        if (user.getPassword().equals(password)){
+            return Optional.of(user);
+        } else {
+            return Optional.empty();
+        }
     }
 
 }
