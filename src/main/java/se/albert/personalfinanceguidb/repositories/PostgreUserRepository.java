@@ -17,8 +17,8 @@ public class PostgreUserRepository implements IUserRepository {
         try(Statement statement = connection.createStatement()){
             statement.execute("CREATE TABLE IF NOT EXISTS users (" +
                     "id UUID PRIMARY KEY," +
-                    "username TEXT," +
-                    "password TEXT," +
+                    "username TEXT UNIQUE NOT NULL," +
+                    "password TEXT NOT NULL," +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 
 
@@ -40,7 +40,7 @@ public class PostgreUserRepository implements IUserRepository {
             UUID id = set.getObject("id", UUID.class);
             username = set.getString("username");
             String password = set.getString("password");
-            Timestamp createdAt = set.getTimestamp("created_At");
+            Timestamp createdAt = set.getTimestamp("created_at");
 
             User user = new User(id, username, password, createdAt);
             return Optional.of(user);

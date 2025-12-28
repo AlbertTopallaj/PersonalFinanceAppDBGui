@@ -2,21 +2,22 @@ package se.albert.personalfinanceguidb.models;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
 // Importerade bibliotek
 
 public class Transaction { // Klassens namn
     private UUID id;
+    private UUID userId;
     private int amount; // En konstruktor för alla delar för en transaction, första är värdet i kronor
     private String description; // Beskrivningen
     private String type; // Typen av transaktion
     private Timestamp created_at; // Datumet
 
-    public Transaction(UUID id, String description, int amount, String type, Timestamp date) {
+    public Transaction(UUID id, UUID userId, String description, int amount, String type, Timestamp date) {
 
         this.id = id;
+        this.userId = userId;
         this.description = description;
         this.amount = amount;
         this.type = type;
@@ -24,9 +25,10 @@ public class Transaction { // Klassens namn
 
     }
 
-    public Transaction(UUID id, int amount, String description, String type, LocalDate date) {
+    public Transaction(UUID id, UUID userId, String description, int amount, String type, LocalDate date){
 
         this.id = id;
+        this.userId = userId;
         this.description = description;
         this.amount = amount;
         this.type = type;
@@ -42,6 +44,7 @@ public class Transaction { // Klassens namn
         this.id = id;
     }
 
+    public UUID getUserId(){ return userId;}
     public int getAmount() { return amount; } // Getter, returnerar värden.
     public String getDescription() { return description; }
     public String getType() { return type; }

@@ -1,13 +1,11 @@
 package se.albert.personalfinanceguidb.repositories;
 
 import se.albert.personalfinanceguidb.models.Transaction;
-import se.albert.personalfinanceguidb.utilty.DateUtility;
 
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,12 +22,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
             statement.execute("CREATE TABLE IF NOT EXISTS transactions (" +
                     "id UUID PRIMARY KEY," +
-                    "description TEXT," +
-                    "amount INT," +
-                    "type TEXT," +
-                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+                    "user_id UUID NOT NULL REFERENCES users(id)," +
+                    "description TEXT NOT NULL," +
+                    "amount INT NOT NULL," +
+                    "type TEXT NOT NULL," +
+                    "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)");
         }
-
     }
 
     @Override
@@ -47,33 +45,38 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             }
 
             UUID id = set.getObject("id", UUID.class);
+            UUID userId = set.getObject("user_id", UUID.class);
             String description = set.getString("description");
             int amount = set.getInt("amount");
             String type = set.getString("type");
             Timestamp date = set.getTimestamp("created_at");
 
-            return new Transaction(id, description, amount, type, date);
+            return new Transaction(id, userId, description, amount, type, date);
         }
 
     }
 
     @Override
-    public List<Transaction> findAll() throws SQLException {
+    public List<Transaction> findAllByUserId(UUID userId) throws SQLException {
         List<Transaction> transactions = new ArrayList<>();
 
-        try(Statement statement = connection.createStatement()){
+        String sql = "SELECT * FROM transactions WHERE user_Id = ? ";
 
-            ResultSet set = statement.executeQuery("SELECT * FROM transactions");
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 
+            preparedStatement.setObject(1, userId);
+
+            ResultSet set =  preparedStatement.executeQuery();
             while (set.next()){
 
                 UUID id = set.getObject("id", UUID.class);
+                UUID userid = set.getObject("user_id", UUID.class);
                 String description = set.getString("description");
                 int amount = set.getInt("amount");
                 String type = set.getString("type");
                 Timestamp date = set.getTimestamp("created_at");
 
-                Transaction transaction = new Transaction(id, description, amount, type, date);
+                Transaction transaction = new Transaction(id, userid, description, amount, type, date);
                 transactions.add(transaction);
 
             }
@@ -86,15 +89,16 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     @Override
     public void save(Transaction transaction) throws SQLException {
 
-        String sql = "INSERT INTO transactions (id, description, amount, type, created_at) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO transactions (id, user_id, description, amount, type, created_at) VALUES (?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 
             preparedStatement.setObject(1, transaction.getId());
-            preparedStatement.setString(2, transaction.getDescription());
-            preparedStatement.setInt(3, transaction.getAmount());
-            preparedStatement.setString(4, transaction.getType());
-            preparedStatement.setTimestamp(5, transaction.getDate());
+            preparedStatement.setObject(2, transaction.getUserId());
+            preparedStatement.setString(3, transaction.getDescription());
+            preparedStatement.setInt(4, transaction.getAmount());
+            preparedStatement.setString(5, transaction.getType());
+            preparedStatement.setTimestamp(6, transaction.getDate());
 
             preparedStatement.executeUpdate();
 
@@ -122,11 +126,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         }
 
     @Override
-    public int getTotalIncome(String type) throws Exception {
-        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ?";
+    public int getTotalIncome(String type, UUID userId) throws Exception {
+        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND user_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt(1);
@@ -134,11 +139,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getTotalExpense(String type) throws Exception {
-        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ?";
+    public int getTotalExpense(String type, UUID userId) throws Exception {
+        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt(1);
@@ -147,11 +153,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getDailyIncome(String type) throws Exception {
-        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE";
+    public int getDailyIncome(String type, UUID userId) throws Exception {
+        String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE AND user_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt(1);
@@ -159,11 +166,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getWeeklyIncome(String type) throws Exception {
-        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE)";
+    public int getWeeklyIncome(String type, UUID userId) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt(1);
@@ -171,11 +179,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getMonthlyIncome(String type) throws Exception {
-        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)";
+    public int getMonthlyIncome(String type, UUID userId) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -185,11 +194,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getYearlyIncome(String type) throws Exception {
-        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE)";
+    public int getYearlyIncome(String type, UUID userId) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -199,11 +209,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getDailyExpense(String type) throws Exception {
-        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE";
+    public int getDailyExpense(String type, UUID userId) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE AND user_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -213,11 +224,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getWeeklyExpense(String type) throws Exception {
-        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE)";
+    public int getWeeklyExpense(String type, UUID userId) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt(1);
@@ -225,11 +237,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getMonthlyExpense(String type) throws Exception {
-        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)";
+    public int getMonthlyExpense(String type, UUID userId) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -239,11 +252,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getYearlyExpense(String type) throws Exception {
-        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE)";
+    public int getYearlyExpense(String type, UUID userId) throws Exception {
+        String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
+            preparedStatement.setObject(2, userId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();

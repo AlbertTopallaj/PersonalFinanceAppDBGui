@@ -12,10 +12,10 @@ public class User {
 
     public User(UUID id, String username, String password, Date created_at){
 
-        this.id = UUID.randomUUID();
+        this.id = id;
         this.username = username;
         this.password = password;
-        this.created_at = new Date();
+        this.created_at = created_at;
 
     }
 
@@ -33,7 +33,7 @@ public class User {
         return created_at;
     }
 
-    public void setCreated_at(){
+    public void setCreated_at(Date created_at){
         this.created_at = created_at;
     }
 

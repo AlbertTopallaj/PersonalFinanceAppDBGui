@@ -10,6 +10,7 @@ import se.albert.personalfinanceguidb.models.Transaction;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.repositories.PostgreTransactionRepository;
+import se.albert.personalfinanceguidb.services.AuthService;
 
 
 import java.sql.SQLException;
@@ -71,12 +72,17 @@ public class AddTransactionScene { // Klassens namn
         saveBtn.setOnAction(e -> { // Om man trycker på spara transaktion händer följande
             try { // Try catch för att hantera fel
                 UUID id = UUID.randomUUID();
+                UUID userId = AuthService.getuserID();
+                if (userId ==  null){
+                    transactionSaved.setText("Ingen användare inloggad bre");
+                }
+
                 String type = typeBox.getValue(); // Värdet för vad för typ av transaktion tas emot
                 int amount = Integer.parseInt(amountField.getText()); // Värdet för hur mycket kronor transaktionen innehåller tas emot, man parsar int så att det kan bli string
                 LocalDate date = datePicker.getValue(); // Värdet för datum tas emot
                 String description = descriptionField.getText(); // Värdet för beskrivningen tas emot
 
-                Transaction transaction = new Transaction(id, amount, description, type, date); // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
+                Transaction transaction = new Transaction(id, userId, description, amount, type, date); // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
                 transactionRepository.save(transaction);
 
                 transactionSaved.setText("Transaktion sparad!"); // Text för att bekräfta att transaktionen sparades

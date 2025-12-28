@@ -12,12 +12,14 @@ import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.Transaction;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
+import se.albert.personalfinanceguidb.services.AuthService;
 
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 import java.util.List;
+import java.util.UUID;
 
 // Importerade bibiliotek och andra klasser
 
@@ -63,7 +65,7 @@ public class ViewTransactionScene { // Klassens namn
                 new Label("Datum:"), dateFilter); // Typ och datum
 
         // Här kommer själva listan av data, när en användare skickar in en ny transaktion skickas till hit och sparas tillfälligt i listan
-        List<Transaction> transactionList = transactionRepository.findAll();
+        List<Transaction> transactionList = transactionRepository.findAllByUserId(AuthService.getuserID());
       ObservableList<Transaction> observableTransactions =
                FXCollections.observableArrayList(transactionList); // Tar emot datan från klassen DataStore
        FilteredList<Transaction> filteredTransactions = // Lista för filterade transaktioner
@@ -84,24 +86,27 @@ public class ViewTransactionScene { // Klassens namn
         Label monthlyAll = new Label();
         Label yearlySpending = new Label();
 
+
+
         Runnable updateStats = () -> { // Möjliggör uppdatering av labels för att visa data
+            UUID currentUserId = AuthService.getuserID();
             try {
-                dailySpending.setText("Spenderat idag: "+ transactionRepository.getDailyExpense("Spendering")); // Sätter text och så att datan visas för samtliga labels
+                dailySpending.setText("Spenderat idag: "+ transactionRepository.getDailyExpense("Spendering", currentUserId)); // Sätter text och så att datan visas för samtliga labels
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                weeklyIncome.setText("Inkomst denna vecka: "+ transactionRepository.getWeeklyIncome("Inkomst"));
+                weeklyIncome.setText("Inkomst denna vecka: "+ transactionRepository.getWeeklyIncome("Inkomst", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                monthlyAll.setText("Totalt denna månad: " + transactionRepository.getMonthlyIncome("Inkomst"));
+                monthlyAll.setText("Totalt denna månad: " + transactionRepository.getMonthlyIncome("Inkomst", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                yearlySpending.setText("Spenderat detta år: " + transactionRepository.getYearlyExpense("Spendering"));
+                yearlySpending.setText("Spenderat detta år: " + transactionRepository.getYearlyExpense("Spendering", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

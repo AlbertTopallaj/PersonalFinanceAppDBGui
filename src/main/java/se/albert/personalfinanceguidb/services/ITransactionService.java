@@ -8,27 +8,26 @@ import java.util.UUID;
 
 public interface ITransactionService {
 
-    Transaction createTransaction(UUID id, int amount, String description, String type, Timestamp created_at) throws Exception;
+    Transaction createTransaction(UUID id, UUID userId, int amount, String description, String type, Timestamp created_at) throws Exception;
 
-    int getTotalIncome(String type) throws Exception;
+    int getTotalIncome(String type, UUID userId) throws Exception;
 
-    int getTotalExpense(String type) throws Exception;
+    int getTotalExpense(String type, UUID userId) throws Exception;
 
-    int getDailyIncome(String type) throws Exception;
+    int getDailyIncome(String type, UUID userId) throws Exception;
 
-    int getWeeklyIncome(String type) throws Exception;
+    int getWeeklyIncome(String type, UUID userId) throws Exception;
 
-    int getMonthlyIncome(String type) throws Exception;
+    int getMonthlyIncome(String type, UUID userId) throws Exception;
 
-    int getYearlyIncome(String type) throws Exception;
+    int getYearlyIncome(String type, UUID userId) throws Exception;
 
-    int getDailyExpense(String type) throws Exception;
+    int getDailyExpense(String type, UUID userId) throws Exception;
 
-    int getWeeklyExpense(String type) throws Exception;
+    int getWeeklyExpense(String type, UUID userId) throws Exception;
 
-    int getMonthlyExpense(String type) throws Exception;
+    int getMonthlyExpense(String type, UUID userId) throws Exception;
 
-    int getYearlyExpense(String type) throws Exception;
-
+    int getYearlyExpense(String type, UUID userId) throws Exception;
 
 }

@@ -20,9 +20,9 @@ public class DefaultTransactionService implements ITransactionService{
 
 
     @Override
-    public Transaction createTransaction(UUID id, int amount, String description, String type, Timestamp created_at) throws Exception {
+    public Transaction createTransaction(UUID id, UUID userId, int amount, String description, String type, Timestamp created_at) throws Exception {
 
-        Transaction transaction = new Transaction(id, description, amount, type, created_at);
+        Transaction transaction = new Transaction(id, userId, description, amount, type, created_at);
         try {
             transactionRepository.save(transaction);
         } catch (Exception e){
@@ -32,52 +32,52 @@ public class DefaultTransactionService implements ITransactionService{
     }
 
     @Override
-    public int getTotalIncome(String type) throws Exception {
-        return transactionRepository.getTotalIncome("Inkomst");
+    public int getTotalIncome(String type, UUID userId) throws Exception {
+        return transactionRepository.getTotalIncome("Inkomst", userId);
     }
 
     @Override
-    public int getTotalExpense(String type) throws Exception {
-        return transactionRepository.getTotalExpense("Spendering");
+    public int getTotalExpense(String type, UUID userId) throws Exception {
+        return transactionRepository.getTotalExpense("Spendering", userId);
     }
 
     @Override
-    public int getDailyIncome(String type) throws Exception {
-        return transactionRepository.getDailyIncome("Inkomst");
+    public int getDailyIncome(String type, UUID userId) throws Exception {
+        return transactionRepository.getDailyIncome("Inkomst", userId);
     }
 
     @Override
-    public int getWeeklyIncome(String type) throws Exception {
-        return transactionRepository.getWeeklyIncome("Inkomst");
+    public int getWeeklyIncome(String type, UUID userId) throws Exception {
+        return transactionRepository.getWeeklyIncome("Inkomst", userId);
     }
 
     @Override
-    public int getMonthlyIncome(String type) throws Exception {
-        return transactionRepository.getMonthlyIncome("Inkomst");
+    public int getMonthlyIncome(String type, UUID userId) throws Exception {
+        return transactionRepository.getMonthlyIncome("Inkomst", userId);
     }
 
     @Override
-    public int getYearlyIncome(String type) throws Exception {
-        return transactionRepository.getYearlyIncome("Inkomst");
+    public int getYearlyIncome(String type, UUID userId) throws Exception {
+        return transactionRepository.getYearlyIncome("Inkomst", userId);
     }
 
     @Override
-    public int getDailyExpense(String type) throws Exception {
-        return transactionRepository.getDailyExpense("Spendering");
+    public int getDailyExpense(String type, UUID userId) throws Exception {
+        return transactionRepository.getDailyExpense("Spendering", userId);
     }
 
     @Override
-    public int getWeeklyExpense(String type) throws Exception {
-        return transactionRepository.getWeeklyExpense("Spendering");
+    public int getWeeklyExpense(String type, UUID userId) throws Exception {
+        return transactionRepository.getWeeklyExpense("Spendering", userId);
     }
 
     @Override
-    public int getMonthlyExpense(String type) throws Exception {
-        return transactionRepository.getMonthlyExpense("Spendering");
+    public int getMonthlyExpense(String type, UUID userId) throws Exception {
+        return transactionRepository.getMonthlyExpense("Spendering", userId);
     }
 
     @Override
-    public int getYearlyExpense(String type) throws Exception {
-        return transactionRepository.getYearlyExpense("Spendering");
+    public int getYearlyExpense(String type, UUID userId) throws Exception {
+        return transactionRepository.getYearlyExpense("Spendering", userId);
     }
 }
