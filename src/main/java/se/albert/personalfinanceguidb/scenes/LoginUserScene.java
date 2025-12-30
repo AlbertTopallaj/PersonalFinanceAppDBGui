@@ -58,14 +58,10 @@ public class LoginUserScene { // Klassens namn
 
         loginButton.setOnAction(e -> { // Om man trycker på knappen händer följande
 
-            System.out.println("knapp tryckt");
-
             String username = usernameField.getText();
             String password = passwordField.getText();
 
             Optional<User> optional;
-
-
 
             try {
                 optional = userService.checkUserLogin(username, password);
@@ -76,9 +72,6 @@ public class LoginUserScene { // Klassens namn
                 alert.showAndWait();
                 return;
             }
-
-
-            System.out.println("passerat del 1");
 
             if (optional.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -96,8 +89,6 @@ public class LoginUserScene { // Klassens namn
             alert.setContentText("Inloggning lyckades");
             alert.showAndWait();
 
-            System.out.println("kommer hit?");
-
             primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, userService).create(primaryStage));
 
         });
@@ -106,7 +97,7 @@ public class LoginUserScene { // Klassens namn
         goToregisterSceneButton.setMaxWidth(Double.MAX_VALUE);
 
         goToregisterSceneButton.setOnAction(e-> {
-            primaryStage.setScene(new RegisterUserScene(userRepository, transactionRepository).create(primaryStage));
+            primaryStage.setScene(new RegisterUserScene(userRepository, transactionRepository, userService).create(primaryStage));
 
         });
 

@@ -20,10 +20,11 @@ public class RegisterUserScene {// Klassens namn
     private final ITransactionRepository transactionRepository;
     private IUserService userService;
 
-    public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository){
+    public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository, IUserService userService){
 
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.userService = userService;
 
     }
     public Scene create(Stage primaryStage) { // Metod för att skapa scenen
