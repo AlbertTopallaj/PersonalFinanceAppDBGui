@@ -10,6 +10,7 @@ import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.services.AuthService;
+import se.albert.personalfinanceguidb.services.ITransactionService;
 import se.albert.personalfinanceguidb.services.IUserService;
 
 import java.util.Optional;
@@ -19,15 +20,16 @@ import java.util.Optional;
 public class LoginUserScene { // Klassens namn
 
     private final ITransactionRepository transactionRepository;
+    private final ITransactionService transactionService;
     private final IUserRepository userRepository;
     private final IUserService userService;
 
-    public LoginUserScene(IUserRepository userRepository, IUserService userService, ITransactionRepository transactionRepository) {
+    public LoginUserScene(IUserRepository userRepository, IUserService userService, ITransactionRepository transactionRepository, ITransactionService transactionService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.transactionRepository = transactionRepository;
-
+        this.transactionService = transactionService;
     }
 
     public Scene create(Stage primaryStage) { // Metod för att skapa scenen
@@ -90,7 +92,7 @@ public class LoginUserScene { // Klassens namn
             alert.setContentText("Inloggning lyckades");
             alert.showAndWait();
 
-            primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, userService).create(primaryStage));
+            primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, transactionService, userService).create(primaryStage));
 
         });
 
@@ -98,7 +100,7 @@ public class LoginUserScene { // Klassens namn
         goToregisterSceneButton.setMaxWidth(Double.MAX_VALUE);
 
         goToregisterSceneButton.setOnAction(e-> {
-            primaryStage.setScene(new RegisterUserScene(userRepository, transactionRepository, userService).create(primaryStage));
+            primaryStage.setScene(new RegisterUserScene(userRepository, transactionRepository, transactionService, userService ).create(primaryStage));
 
         });
 

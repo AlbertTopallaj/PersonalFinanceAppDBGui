@@ -39,7 +39,7 @@ public class Main extends Application {  // Main klassen, vad som ska köras
         transactionRepository = new PostgreTransactionRepository(dbUrl, dbUser, dbPassword);
         transactionService = new DefaultTransactionService(transactionRepository);
 
-        LoginUserScene login = new LoginUserScene(userRepository, userService, transactionRepository); // En logga in sida
+        LoginUserScene login = new LoginUserScene(userRepository, userService, transactionRepository, transactionService); // En logga in sida
         primaryStage.setScene(login.create(primaryStage)); // Man sätter första scenen som logga in scenen
         primaryStage.setTitle("Personal Finance App"); // Titeln för applikationen är Personal Finance APP
         primaryStage.show(); // Visar primaryStage

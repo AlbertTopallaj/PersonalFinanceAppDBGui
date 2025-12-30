@@ -11,6 +11,7 @@ import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.repositories.PostgreUserRepository;
 import se.albert.personalfinanceguidb.services.AuthService;
+import se.albert.personalfinanceguidb.services.ITransactionService;
 import se.albert.personalfinanceguidb.services.IUserService;
 
 // Importerade bibliotek och klasser
@@ -19,12 +20,14 @@ public class RegisterUserScene {// Klassens namn
 
     private final IUserRepository userRepository;
     private final ITransactionRepository transactionRepository;
+    private final ITransactionService transactionService;
     private IUserService userService;
 
-    public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository, IUserService userService){
+    public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository, ITransactionService transactionService, IUserService userService){
 
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.transactionService = transactionService;
         this.userService = userService;
 
     }
@@ -63,7 +66,7 @@ public class RegisterUserScene {// Klassens namn
 
         login.setOnAction(e -> {
 
-            primaryStage.setScene(new LoginUserScene(userRepository, userService, transactionRepository).create(primaryStage));
+            primaryStage.setScene(new LoginUserScene(userRepository, userService, transactionRepository, transactionService).create(primaryStage));
 
         });
 
@@ -125,7 +128,7 @@ public class RegisterUserScene {// Klassens namn
                 alert.setContentText("Registeringen lyckades!");
                 alert.showAndWait();
 
-                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, userService).create(primaryStage));
+                primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, transactionService, userService).create(primaryStage));
 
 
             } catch (Exception exception){
