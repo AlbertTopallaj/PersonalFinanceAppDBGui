@@ -3,6 +3,7 @@ package se.albert.personalfinanceguidb.services;
 import se.albert.personalfinanceguidb.models.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface IUserService {
 

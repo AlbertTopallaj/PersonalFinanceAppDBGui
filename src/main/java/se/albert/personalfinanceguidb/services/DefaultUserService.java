@@ -4,6 +4,7 @@ import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class DefaultUserService implements IUserService {
 
@@ -57,5 +58,4 @@ public class DefaultUserService implements IUserService {
             return Optional.empty();
         }
     }
-
 }

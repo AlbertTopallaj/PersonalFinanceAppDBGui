@@ -67,5 +67,4 @@ public class PostgreUserRepository implements IUserRepository {
         }
 
     }
-
 }

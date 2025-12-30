@@ -10,10 +10,12 @@ import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
+import se.albert.personalfinanceguidb.services.AuthService;
 import se.albert.personalfinanceguidb.services.IUserService;
 
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.UUID;
 
 
 // Importerade bibliotek för UI och andra klasser
@@ -25,11 +27,9 @@ public class MainMenuScene { // Klassens namn
     private final IUserService userService;
 
     public MainMenuScene(IUserRepository userRepository, ITransactionRepository transactionRepository, IUserService userService){
-
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.userService = userService;
-
     }
 
 
@@ -44,14 +44,22 @@ public class MainMenuScene { // Klassens namn
         primaryStage.setHeight(700); // Höjden sätts
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
+        UUID currentUser = AuthService.getuserID();
+        User username = AuthService.getCurrentUser();
 
-
-        Label title = new Label("Välkommen " ); // Rubriken för sidan sätts
+        Label title = new Label("Välkommen " + username.getUsername()); // Rubriken för sidan sätts
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;"); // Textstorlek och fetmarkerad text sätts
 
+        UUID currentUserId = AuthService.getuserID();
 
-        Label balanceLabel = new Label("Din kontobalans: "+" kr"); // Balansen sätts i UI
+        Label balanceLabel; // Balansen sätts i UI
+        try {
+            balanceLabel = new Label("Din kontobalans: " + transactionRepository.getTotalIncome("Inkomst", currentUserId) + " kr");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         balanceLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"); // Textstorlek sätts, Färgen sätts som fetmarkerad text sätts
+
 
         // Själva menyn börjar nu
         Button addTransaction = new Button("Lägg till en ny transaktion"); // Knapp för att gå in till AddTransactionScene

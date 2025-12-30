@@ -10,6 +10,7 @@ import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.ITransactionRepository;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 import se.albert.personalfinanceguidb.repositories.PostgreUserRepository;
+import se.albert.personalfinanceguidb.services.AuthService;
 import se.albert.personalfinanceguidb.services.IUserService;
 
 // Importerade bibliotek och klasser
@@ -115,11 +116,12 @@ public class RegisterUserScene {// Klassens namn
                 }
 
                 User user = new User(username, password);
+                AuthService.setCurrentUser(user);
                 userRepository.save(user);
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Registering lyckades");
-                alert.setHeaderText("Välkommen");
+                alert.setHeaderText("Välkommen " + username);
                 alert.setContentText("Registeringen lyckades!");
                 alert.showAndWait();
 

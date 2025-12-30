@@ -75,17 +75,18 @@ public class LoginUserScene { // Klassens namn
 
             if (optional.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("fel 2 ;(");
+                alert.setContentText("Felaktiga inloggningsuppgifter, försök igen");
                 alert.showAndWait();
                 return;
             }
 
             User user = optional.get();
             AuthService.setUserID(user.getId());
+            AuthService.setCurrentUser(user);
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Inloggning lyckades");
-            alert.setHeaderText("Välkommen " + user.getUsername());
+            alert.setHeaderText("Välkommen åter " + user.getUsername());
             alert.setContentText("Inloggning lyckades");
             alert.showAndWait();
 

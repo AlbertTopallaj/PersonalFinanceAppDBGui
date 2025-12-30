@@ -265,6 +265,5 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             return resultSet.getInt(1);
         }
     }
-
 }
 

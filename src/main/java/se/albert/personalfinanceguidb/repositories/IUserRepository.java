@@ -4,6 +4,7 @@ import se.albert.personalfinanceguidb.models.User;
 
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.UUID;
 
 
 public interface IUserRepository {
