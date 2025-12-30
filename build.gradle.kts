@@ -28,6 +28,7 @@ javafx {
 
 dependencies {
     implementation("org.postgresql:postgresql:42.7.3")
+    implementation ("org.mindrot:jbcrypt:0.4")
 }
 
 
