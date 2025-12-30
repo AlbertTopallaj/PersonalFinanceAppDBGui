@@ -1,9 +1,8 @@
 package se.albert.personalfinanceguidb.services;
 
-import org.mindrot.jbcrypt.BCrypt;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,8 +27,11 @@ public class DefaultUserService implements IUserService {
             throw new Exception();
         }
 
+        String passwordHash = BCrypt
+                .withDefaults()
+                .hashToString(12, password.toCharArray());
 
-        User user = new User(username, password);
+        User user = new User(username, passwordHash);
         try {
             userRepository.save(user);
         } catch (Exception e) {
@@ -54,10 +56,14 @@ public class DefaultUserService implements IUserService {
 
         User user = optional.get();
 
-        if (user.getPassword().equals(password)){
-            return Optional.of(user);
-        } else {
+        BCrypt.Result result = BCrypt
+                .verifyer()
+                .verify(password.toCharArray(), user.getPassword());
+
+        if (!result.verified) {
             return Optional.empty();
         }
+        return Optional.of(user);
+
     }
 }

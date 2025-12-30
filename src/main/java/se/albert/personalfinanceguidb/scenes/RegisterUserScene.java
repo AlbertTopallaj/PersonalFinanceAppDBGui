@@ -117,7 +117,7 @@ public class RegisterUserScene {// Klassens namn
 
                 User user = new User(username, password);
                 AuthService.setCurrentUser(user);
-                userRepository.save(user);
+                userService.createUser(username, password);
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Registering lyckades");
