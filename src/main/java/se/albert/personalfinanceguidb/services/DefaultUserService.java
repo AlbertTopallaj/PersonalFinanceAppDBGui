@@ -1,5 +1,6 @@
 package se.albert.personalfinanceguidb.services;
 
+import org.mindrot.jbcrypt.BCrypt;
 import se.albert.personalfinanceguidb.models.User;
 import se.albert.personalfinanceguidb.repositories.IUserRepository;
 
@@ -26,6 +27,7 @@ public class DefaultUserService implements IUserService {
         if (existing.isPresent()) {
             throw new Exception();
         }
+
 
         User user = new User(username, password);
         try {
