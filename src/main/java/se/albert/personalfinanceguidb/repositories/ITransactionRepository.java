@@ -37,4 +37,5 @@ public interface ITransactionRepository {
 
     int getYearlyExpense(String type, UUID userId) throws Exception;
 
+    int getAccountBalance(UUID userId) throws Exception;
 }

@@ -53,7 +53,7 @@ public class Transaction { // Klassens namn
 
     public String toString(){ // Metod för att visa hur det ska skickas ut i listan
 
-        return id + ": " + type + ": " + description + " (" + amount + " kr) " +  created_at; // Returnerar utskrift till lista
+        return "TYP: " + type + " VÄRDE: " + amount + "kr " + "BESKRIVNING: " + description + " SKAPAD: " + created_at + " ID: " + id;   // Returnerar utskrift till lista
 
     }
 }

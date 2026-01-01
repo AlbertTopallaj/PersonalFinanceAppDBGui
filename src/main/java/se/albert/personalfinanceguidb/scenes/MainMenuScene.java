@@ -57,7 +57,7 @@ public class MainMenuScene { // Klassens namn
 
         Label balanceLabel; // Balansen sätts i UI
         try {
-            balanceLabel = new Label("Din kontobalans: " + transactionRepository.getTotalIncome("Inkomst", currentUserId) + " kr");
+            balanceLabel = new Label("Din kontobalans: " + transactionRepository.getAccountBalance(currentUserId) + " kr");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

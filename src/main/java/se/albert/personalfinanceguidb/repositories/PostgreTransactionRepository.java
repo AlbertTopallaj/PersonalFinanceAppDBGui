@@ -265,5 +265,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             return resultSet.getInt(1);
         }
     }
+
+    @Override
+    public int getAccountBalance(UUID userId) throws Exception {
+        return getTotalIncome("Inkomst", userId) - getTotalExpense("Spendering", userId);
+
+    }
+
 }
 
