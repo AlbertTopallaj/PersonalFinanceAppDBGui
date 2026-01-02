@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.User;
@@ -33,14 +34,16 @@ public class RegisterUserScene {// Klassens namn
     }
     public Scene create(Stage primaryStage) { // Metod för att skapa scenen
 
-        VBox root = new VBox(20); // Root sätts
-        root.setPadding(new Insets(30)); // Mellanrum sätts
-        root.setAlignment(Pos.CENTER); // Postioneringen sätts
+        StackPane root = new StackPane(); // Root sätts
+        root.setPadding(new Insets(40)); // Mellanrum sätts
 
-        Scene scene = new Scene(root, 400, 300); // Scenen skapas
+        VBox content = new VBox(20);
+        content.setAlignment(Pos.TOP_CENTER);
 
-        primaryStage.setWidth(500); // Bredden sätts
-        primaryStage.setHeight(700); // Höjden sätts
+        Scene scene = new Scene(root, 700, 900); // Scenen skapas
+
+        primaryStage.setWidth(700); // Bredden sätts
+        primaryStage.setHeight(900); // Höjden sätts
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
         Label title = new Label("Registera konto"); // Rubriken sätts för sidan

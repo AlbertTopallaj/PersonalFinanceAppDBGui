@@ -41,16 +41,13 @@ public class ViewTransactionScene { // Klassens namn
 
     public Scene create(Stage primaryStage) throws SQLException { // Metoden för scenen, stage är primaryStage
 
-        VBox root = new VBox(20); // Root skapas
-        root.setPadding(new Insets(20)); // Ger mellanrum
-        root.setAlignment(Pos.TOP_CENTER); // Övre centrala delen är allt på
+        StackPane root = new StackPane(); // Root skapas
+        root.setPadding(new Insets(40)); // Ger mellanrum
 
-        Scene scene = new Scene(root, 500, 700); // Scenen skapas
-
-        primaryStage.setWidth(500); // Bredden på fönstret
-        primaryStage.setHeight(700); // Höjden på fönstret
-        primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
-
+        VBox content = new VBox(20);
+        content.setAlignment(Pos.TOP_CENTER);
+        content.setPadding(new Insets(20));
+        content.setMaxWidth(800);
 
         Label title = new Label("Transaktioner"); // En label som ska vara en rubrik för sidan
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;"); // Styling för rubriken, ändra textstorlek samt göra texten tjockmarkerad
@@ -188,7 +185,14 @@ public class ViewTransactionScene { // Klassens namn
         backToMenu.setOnAction(e -> primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, transactionService, userService).create(primaryStage))); // Om man trycker på knappen skickas man till menyn
 
         // Lägg ihop
-        root.getChildren().addAll(title, filters, transactionListView, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas
+        content.getChildren().addAll(title, filters, transactionListView, statsBox, deleteBtn, backToMenu); // Hela ViewTransactionScenes delar sätts ihop och visas
+
+        root.getChildren().add(content);
+
+        Scene scene = new Scene(root, 900, 700); // Scenen skapas
+        primaryStage.setScene(scene);
+        primaryStage.setFullScreen(true);
+        primaryStage.setResizable(true);
 
         return scene; // Möjliggör för att faktiskt visa sidan
     }

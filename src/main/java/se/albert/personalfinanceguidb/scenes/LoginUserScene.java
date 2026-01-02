@@ -38,10 +38,10 @@ public class LoginUserScene { // Klassens namn
         root.setPadding(new Insets(30)); // Mellanrum sätts
         root.setAlignment(Pos.CENTER); // Postioneringen sätts
 
-        Scene scene = new Scene(root, 400, 300); // Scenen skapas
+        Scene scene = new Scene(root, 700,  900); // Scenen skapas
 
-        primaryStage.setWidth(500); // Bredden sätts
-        primaryStage.setHeight(700); // Höjden sätts
+        primaryStage.setWidth(700); // Bredden sätts
+        primaryStage.setHeight(900); // Höjden sätts
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
         Label title = new Label(" Logga in"); // Rubriken sätts för sidan

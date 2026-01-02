@@ -41,10 +41,10 @@ public class MainMenuScene { // Klassens namn
         root.setPadding(new Insets(30)); // Mellanrum sätts
         root.setAlignment(Pos.CENTER); // Postioneringen sätts
 
-        Scene scene = new Scene(root, 400, 300); // Sidan sätts, root visar innehåll samt så sätts måtten för fönstret
+        Scene scene = new Scene(root, 700, 900); // Sidan sätts, root visar innehåll samt så sätts måtten för fönstret
 
-        primaryStage.setWidth(500); // Bredden sätts
-        primaryStage.setHeight(700); // Höjden sätts
+        primaryStage.setWidth(700); // Bredden sätts
+        primaryStage.setHeight(900); // Höjden sätts
         primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
         UUID currentUser = AuthService.getuserID();
