@@ -17,6 +17,7 @@ import se.albert.personalfinanceguidb.services.IUserService;
 
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -94,10 +95,17 @@ public class AddTransactionScene { // Klassens namn
                 LocalDate date = datePicker.getValue(); // Värdet för datum tas emot
                 String description = descriptionField.getText(); // Värdet för beskrivningen tas emot
 
-                Transaction transaction = new Transaction(id, userId, description, amount, type, date); // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
+                // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
 
                 // Spara i databasen
-                transactionRepository.save(transaction);
+                transactionService.createTransaction(
+                        id,
+                        userId,
+                        amount,
+                        description,
+                        type,
+                        Timestamp.valueOf(date.atStartOfDay())
+                );
 
                 transactionSaved.setText("Transaktion sparad!"); // Text för att bekräfta att transaktionen sparades
                 amountField.clear(); // Tömma samtliga input field
@@ -106,11 +114,16 @@ public class AddTransactionScene { // Klassens namn
 
             } catch (NumberFormatException ex) { // Om nummerformatet är fel händer följande
                 transactionSaved.setText("Ogiltigt belopp. Ange ett heltal."); // Felmeddelande sätts
+                transactionSaved.setStyle("-fx-text-fill: red");
             }
             catch (SQLException exception ){
                 // Om det finns fel printa till utvecklare
                 exception.printStackTrace();
 
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                transactionSaved.setText("Ett fel uppstod vid sparande.");
+                transactionSaved.setStyle("-fx-text-fill: red");
             }
         });
 
