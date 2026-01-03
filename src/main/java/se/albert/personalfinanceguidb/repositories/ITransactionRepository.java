@@ -17,25 +17,27 @@ public interface ITransactionRepository {
 
     void delete(UUID transactionId) throws SQLException;
 
-    int getTotalIncome(String type, UUID userId) throws Exception;
+    int getTotalIncome(String type, UUID userId) throws SQLException;
 
-    int getTotalExpense(String type, UUID userId) throws Exception;
+    int getTotalExpense(String type, UUID userId) throws SQLException;
 
-    int getDailyIncome(String type, UUID userId) throws Exception;
+    int getDailyIncome(String type, UUID userId) throws SQLException;
 
-    int getWeeklyIncome(String type, UUID userId) throws Exception;
+    int getWeeklyIncome(String type, UUID userId) throws SQLException;
 
-    int getMonthlyIncome(String type, UUID userId) throws Exception;
+    int getMonthlyIncome(String type, UUID userId) throws SQLException;
 
-    int getYearlyIncome(String type, UUID userId) throws Exception;
+    int getYearlyIncome(String type, UUID userId) throws SQLException;
 
-    int getDailyExpense(String type, UUID userId) throws Exception;
+    int getDailyExpense(String type, UUID userId) throws SQLException;
 
-    int getWeeklyExpense(String type, UUID userId) throws Exception;
+    int getWeeklyExpense(String type, UUID userId) throws SQLException;
 
-    int getMonthlyExpense(String type, UUID userId) throws Exception;
+    int getMonthlyExpense(String type, UUID userId) throws SQLException;
 
-    int getYearlyExpense(String type, UUID userId) throws Exception;
+    int getYearlyExpense(String type, UUID userId) throws SQLException;
 
-    int getAccountBalance(UUID userId) throws Exception;
+    int getAccountBalance(UUID userId) throws SQLException;
+
+    int getTransactionCount(UUID userId) throws SQLException;
 }

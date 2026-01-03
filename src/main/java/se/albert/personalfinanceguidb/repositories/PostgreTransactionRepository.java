@@ -126,7 +126,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         }
 
     @Override
-    public int getTotalIncome(String type, UUID userId) throws Exception {
+    public int getTotalIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND user_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -139,7 +139,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getTotalExpense(String type, UUID userId) throws Exception {
+    public int getTotalExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -153,7 +153,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getDailyIncome(String type, UUID userId) throws Exception {
+    public int getDailyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE AND user_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -166,7 +166,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getWeeklyIncome(String type, UUID userId) throws Exception {
+    public int getWeeklyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -179,7 +179,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getMonthlyIncome(String type, UUID userId) throws Exception {
+    public int getMonthlyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -194,7 +194,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getYearlyIncome(String type, UUID userId) throws Exception {
+    public int getYearlyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -209,7 +209,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getDailyExpense(String type, UUID userId) throws Exception {
+    public int getDailyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE AND user_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -224,7 +224,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getWeeklyExpense(String type, UUID userId) throws Exception {
+    public int getWeeklyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -237,7 +237,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getMonthlyExpense(String type, UUID userId) throws Exception {
+    public int getMonthlyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -252,7 +252,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getYearlyExpense(String type, UUID userId) throws Exception {
+    public int getYearlyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE) AND user_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -267,8 +267,13 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
-    public int getAccountBalance(UUID userId) throws Exception {
+    public int getAccountBalance(UUID userId) throws SQLException {
         return getTotalIncome("Inkomst", userId) - getTotalExpense("Spendering", userId);
+    }
+
+    @Override
+    public int getTransactionCount(UUID userId) throws SQLException {
+
     }
 }
 
