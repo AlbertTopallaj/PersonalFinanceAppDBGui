@@ -20,6 +20,7 @@ import java.util.Optional;
 
 public class LoginUserScene { // Klassens namn
 
+    // Deklarera services och repos
     private final ITransactionRepository transactionRepository;
     private final ITransactionService transactionService;
     private final IUserRepository userRepository;
@@ -27,6 +28,7 @@ public class LoginUserScene { // Klassens namn
 
     public LoginUserScene(IUserRepository userRepository, IUserService userService, ITransactionRepository transactionRepository, ITransactionService transactionService) {
 
+        // Konstruktor, dependency injections
         this.userRepository = userRepository;
         this.userService = userService;
         this.transactionRepository = transactionRepository;
@@ -59,52 +61,68 @@ public class LoginUserScene { // Klassens namn
 
         loginButton.setOnAction(e -> { // Om man trycker på knappen händer följande
 
+            // Hämta användarnamn och lösenord
             String username = usernameField.getText();
             String password = passwordField.getText();
 
             Optional<User> optional;
 
             try {
+                // Kontrollera om inloggningsuppgifter finns och är rätt
                 optional = userService.checkUserLogin(username, password);
             } catch (Exception ex) {
+                // Skriv ut fel om det finns till utvecklaren
                 ex.printStackTrace();
+
+                // Alert
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Fel vid login: " + ex.getMessage());
                 alert.showAndWait();
                 return;
             }
 
+            // Om det är fel uppgifter
             if (optional.isEmpty()) {
+
+                // Alert
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Felaktiga inloggningsuppgifter, försök igen");
                 alert.showAndWait();
                 return;
             }
 
+
             User user = optional.get();
+            // UserId sätts
             AuthService.setUserID(user.getId());
+
+            // Nuvarande användaren sätts
             AuthService.setCurrentUser(user);
 
+            // Alert
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Inloggning lyckades");
             alert.setHeaderText("Välkommen åter " + user.getUsername());
             alert.setContentText("Inloggning lyckades");
             alert.showAndWait();
 
+            // Man skickas till main menu scenen
             primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, transactionService, userService).create(primaryStage));
 
         });
 
+        // Registera konto knapp
         Button goToregisterSceneButton = new Button("Har du inget konto? Registera dig");
         goToregisterSceneButton.setMaxWidth(Double.MAX_VALUE);
 
+        // Trycker man så skickas man till register användare scenen
         goToregisterSceneButton.setOnAction(e-> {
             primaryStage.setScene(new RegisterUserScene(userRepository, transactionRepository, transactionService, userService ).create(primaryStage));
 
         });
 
 
-        content.getChildren().addAll( // Tar emot alla delar och lägger in de i root
+        content.getChildren().addAll( // Tar emot alla delar
                 title,
                 userLabel, usernameField,
                 passLabel, passwordField,
@@ -112,8 +130,10 @@ public class LoginUserScene { // Klassens namn
                 goToregisterSceneButton
         );
 
+        // Lägger in delarna i root
         root.getChildren().add(content);
 
+        // Returnera scenen med mått
         return new Scene(root, 900, 700);
     }
 }

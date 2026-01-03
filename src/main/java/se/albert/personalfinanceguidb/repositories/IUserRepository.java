@@ -9,6 +9,9 @@ import java.util.UUID;
 
 public interface IUserRepository {
 
+    // Hitta användaren
     Optional<User> findByUsername(String username) throws SQLException;
+
+    // Spara användaren
     void save(User user) throws SQLException;
 }

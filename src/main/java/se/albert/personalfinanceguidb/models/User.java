@@ -5,11 +5,19 @@ import java.util.UUID;
 
 public class User {
 
+    // UUID id för användaren
     private UUID id;
+
+    // Användarnamn för användaren
     private String username;
+
+    // Lösenord för användarnamn
     private String password;
+
+    // När användaren skapades
     private Date created_at;
 
+    // Konstruktor för user
     public User(UUID id, String username, String password, Date created_at){
 
         this.id = id;
@@ -19,6 +27,7 @@ public class User {
 
     }
 
+    // Konstuktor för users när de för första gången registeras
     public User(String username, String password){
 
         this.id = UUID.randomUUID();
@@ -28,6 +37,8 @@ public class User {
 
     }
 
+
+    // Getters och setters
 
     public Date getCreated_at(){
         return created_at;

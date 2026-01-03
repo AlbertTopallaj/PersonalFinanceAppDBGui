@@ -24,12 +24,14 @@ import java.util.UUID;
 
 public class MainMenuScene { // Klassens namn
 
+    // Deklarera repos och services
     private final ITransactionRepository transactionRepository;
     private final ITransactionService transactionService;
     private final IUserRepository userRepository;
     private final IUserService userService;
 
     public MainMenuScene(IUserRepository userRepository, ITransactionRepository transactionRepository, ITransactionService transactionService, IUserService userService){
+        // Konstruktor och dependency injections
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.transactionService = transactionService;
@@ -41,26 +43,32 @@ public class MainMenuScene { // Klassens namn
         StackPane root = new StackPane(); // Root sätts
         root.setPadding(new Insets(40)); // Mellanrum sätts
 
+        // Sätter mellanrum och andra regel för vyn
         VBox content = new VBox(20);
         content.setAlignment(Pos.TOP_CENTER);
         content.setPadding(new Insets(20));
         content.setMaxWidth(800);
 
 
+        // Hämta nuvarande för att sätta välkommen text
         User username = AuthService.getCurrentUser();
 
         Label title = new Label("Välkommen " + username.getUsername()); // Rubriken för sidan sätts
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;"); // Textstorlek och fetmarkerad text sätts
 
+        // Hämta id för nuvarande användare
         UUID currentUserId = AuthService.getuserID();
 
         Label balanceLabel; // Balansen sätts i UI
         try {
+            // Kontobalans label sätts
             balanceLabel = new Label("Din kontobalans: " + transactionRepository.getAccountBalance(currentUserId) + " kr");
+            balanceLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"); // Textstorlek sätts, Färgen sätts som fetmarkerad text sätts
         } catch (Exception e) {
+            // Visar fel till utvecklaren om det finns
             throw new RuntimeException(e);
         }
-        balanceLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"); // Textstorlek sätts, Färgen sätts som fetmarkerad text sätts
+
 
 
         // Själva menyn börjar nu
@@ -82,8 +90,11 @@ public class MainMenuScene { // Klassens namn
                 } // Man sätter scenen till ViewTransactionsScene
         );
 
+        // Knapp för att logga ut ur systemet
         Button logout = new Button("Logga ut ur systemet");
         logout.setMaxWidth(Double.MAX_VALUE);
+
+        // Trycker man så skickas man till logga in scenen
         logout.setOnAction(e ->
 
                 {
@@ -104,8 +115,10 @@ public class MainMenuScene { // Klassens namn
                 quit
         );
 
+        // Skicka in scene i root
         root.getChildren().add(content);
 
+        // Returnera scene med mått
         return new Scene(root, 900, 700);
     }
 }

@@ -93,9 +93,12 @@ public class ViewTransactionScene { // Klassens namn
 
 
         Runnable updateStats = () -> { // Möjliggör uppdatering av labels för att visa data
+
+            // Hämtar userId från aktiv användare
             UUID currentUserId = AuthService.getuserID();
+            // Sätter text och så att datan visas för samtliga labels
             try {
-                dailySpending.setText("Spenderat idag: "+ transactionRepository.getDailyExpense("Spendering", currentUserId)); // Sätter text och så att datan visas för samtliga labels
+                dailySpending.setText("Spenderat idag: "+ transactionRepository.getDailyExpense("Spendering", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

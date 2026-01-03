@@ -24,6 +24,8 @@ import java.util.UUID;
 
 public class AddTransactionScene { // Klassens namn
 
+    // Deklarerar repos och services
+
     private final IUserRepository userRepository;
 
     private final ITransactionRepository transactionRepository;
@@ -32,8 +34,10 @@ public class AddTransactionScene { // Klassens namn
 
     private final IUserService userService;
 
+
     public AddTransactionScene(IUserRepository userRepository, ITransactionRepository transactionRepository, ITransactionService transactionService, IUserService userService){
 
+        // Konstruktor och dependency injections
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
         this.transactionService = transactionService;
@@ -78,7 +82,11 @@ public class AddTransactionScene { // Klassens namn
 
         saveBtn.setOnAction(e -> { // Om man trycker på spara transaktion händer följande
             try { // Try catch för att hantera fel
+
+                // Skapar ett randomiserat UUID id
                 UUID id = UUID.randomUUID();
+
+                // Tar emot userId för att sätta så att endast den användaren kan se transaktionen
                 UUID userId = AuthService.getuserID();
 
                 String type = typeBox.getValue(); // Värdet för vad för typ av transaktion tas emot
@@ -87,6 +95,8 @@ public class AddTransactionScene { // Klassens namn
                 String description = descriptionField.getText(); // Värdet för beskrivningen tas emot
 
                 Transaction transaction = new Transaction(id, userId, description, amount, type, date); // Man samlar ihop alla inputs och skickar upp hela den till konstruktorn och skapar nya transaktionen
+
+                // Spara i databasen
                 transactionRepository.save(transaction);
 
                 transactionSaved.setText("Transaktion sparad!"); // Text för att bekräfta att transaktionen sparades
@@ -98,7 +108,7 @@ public class AddTransactionScene { // Klassens namn
                 transactionSaved.setText("Ogiltigt belopp. Ange ett heltal."); // Felmeddelande sätts
             }
             catch (SQLException exception ){
-                System.out.println(exception);
+                // Om det finns fel printa till utvecklare
                 exception.printStackTrace();
 
             }
@@ -107,15 +117,17 @@ public class AddTransactionScene { // Klassens namn
         backBtn.setOnAction(e -> // Om man trycker på tillbaka knappen händer följande
                 {
                     try {
+                        // Tillbaka till mainmenu
                         primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, transactionService, userService).create(primaryStage));
                     } catch (Exception ex) {
+
                         throw new RuntimeException(ex);
                     }
-                } // Scenen blir Menyn
+                }
         );
 
-        // Layout
-        content.getChildren().addAll( // Alla delar sätts ihop och visas i root
+
+        content.getChildren().addAll( // Alla delar sätts ihop
                 title,
                 new Label("Typ:"), typeBox,
                 new Label("Belopp:"), amountField,
@@ -125,8 +137,10 @@ public class AddTransactionScene { // Klassens namn
                 saveBtn, backBtn
         );
 
+        // Alla delar sätts i root
         root.getChildren().add(content);
 
+        // Returnera scenen med mått
         return new Scene(root, 900, 700);
     }
 }

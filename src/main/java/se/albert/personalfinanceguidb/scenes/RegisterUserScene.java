@@ -19,13 +19,15 @@ import se.albert.personalfinanceguidb.services.IUserService;
 
 public class RegisterUserScene {// Klassens namn
 
+    // Hämta olika repos och services
     private final IUserRepository userRepository;
     private final ITransactionRepository transactionRepository;
     private final ITransactionService transactionService;
     private IUserService userService;
 
-    public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository, ITransactionService transactionService, IUserService userService){
 
+    public RegisterUserScene(IUserRepository userRepository, ITransactionRepository transactionRepository, ITransactionService transactionService, IUserService userService){
+        // Konstruktor och dependency injections
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
         this.transactionService = transactionService;
@@ -64,20 +66,24 @@ public class RegisterUserScene {// Klassens namn
         login.setMaxWidth(Double.MAX_VALUE);
 
         login.setOnAction(e -> {
+            // Man skickas till login scenen
 
             primaryStage.setScene(new LoginUserScene(userRepository, userService, transactionRepository, transactionService).create(primaryStage));
 
         });
 
-        registerButton.setOnAction(e -> { // Om man trycker på knappen händer följande
-
+        registerButton.setOnAction(e -> { //
+            // Om man trycker på register knappen händer följande
 
 
             try {
+                // Hämta användarnamn och lösenord
                 String username = usernameField.getText();
                 String password = passwordField.getText();
 
+                // Regel 1 för lösenord: Måste vara längre än 5 tecken
                 if (password.length() < 5) {
+                    // Alert
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Ditt lösenord är för kort!");
                     alert.setHeaderText(null);
@@ -87,8 +93,10 @@ public class RegisterUserScene {// Klassens namn
 
                 }
 
+                // Regel 2 för lösenord: Får inte vara tomt
                 if (password.isBlank() || password == null) {
 
+                    // Alert
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Du måste ange ett lösenord");
                     alert.setHeaderText(null);
@@ -98,8 +106,10 @@ public class RegisterUserScene {// Klassens namn
 
                 }
 
+                // Regel 1 för användarnamn: Får inte vara tomt
                 if (username.isBlank() || username == null){
 
+                    // Alert
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Du måste ange ett användarnamn");
                     alert.setHeaderText(null);
@@ -109,8 +119,10 @@ public class RegisterUserScene {// Klassens namn
 
                 }
 
+                // Regel 2 för användarnamn: Måste vara längre än 5 tecken
                 if (username.length() < 5){
 
+                    // Alert
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Ditt användarnamn är för kort!");
                     alert.setHeaderText(null);
@@ -119,22 +131,29 @@ public class RegisterUserScene {// Klassens namn
                     return;
                 }
 
+                // Skapa user-objekt med text-input från användare
                 User user = new User(username, password);
+
+                // Sätter nuvarande användare med nya objektet
                 AuthService.setCurrentUser(user);
+
+                // Skapa användaren
                 userService.createUser(username, password);
 
+                // Alert
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Registering lyckades");
                 alert.setHeaderText("Välkommen " + username);
                 alert.setContentText("Registeringen lyckades!");
                 alert.showAndWait();
 
+                // Skickas till mainmenu
                 primaryStage.setScene(new MainMenuScene(userRepository, transactionRepository, transactionService, userService).create(primaryStage));
 
 
+                // Om det finns fel så visas det till användaren
             } catch (Exception exception){
                 exception.printStackTrace();
-                System.out.println(exception);
             }
         });
 
@@ -146,8 +165,10 @@ public class RegisterUserScene {// Klassens namn
                 login
         );
 
+        // Tar emot hela content och skickar till root
         root.getChildren().add(content);
 
+        // Returnera scenen med mått
         return new Scene(root, 900, 700);
     }
 }

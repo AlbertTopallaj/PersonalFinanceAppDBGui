@@ -11,11 +11,16 @@ public interface ITransactionRepository {
 
     Transaction findById(UUID transactionId) throws SQLException;
 
+    // Ta emot alla transaktioner per användare
     List<Transaction> findAllByUserId(UUID userId) throws SQLException;
 
+    // Spara transaktion
     void save(Transaction transaction) throws SQLException;
 
+    // Radera transaktion
     void delete(UUID transactionId) throws SQLException;
+
+    // Statistik metoder
 
     int getTotalIncome(String type, UUID userId) throws SQLException;
 

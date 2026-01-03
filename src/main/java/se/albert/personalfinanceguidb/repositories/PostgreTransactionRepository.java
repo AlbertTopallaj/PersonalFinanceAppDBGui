@@ -12,14 +12,19 @@ import java.util.UUID;
 
 public class PostgreTransactionRepository implements ITransactionRepository {
 
+    // Deklarera connection
     private final Connection connection;
+
 
     public PostgreTransactionRepository(String url, String user, String password) throws SQLException {
 
+        // Anslut till databasen
         connection = DriverManager.getConnection(url, user, password);
 
+        // När anslutningen har skett
         try(Statement statement = connection.createStatement()){
 
+            // Skapa tabell
             statement.execute("CREATE TABLE IF NOT EXISTS transactions (" +
                     "id UUID PRIMARY KEY," +
                     "user_id UUID NOT NULL REFERENCES users(id)," +
@@ -57,18 +62,28 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Hämta alla transaktioner per användare
     public List<Transaction> findAllByUserId(UUID userId) throws SQLException {
+
+        // En arraylist för transactions
         List<Transaction> transactions = new ArrayList<>();
 
+        // SQL querie
         String sql = "SELECT * FROM transactions WHERE user_Id = ? ";
 
+        // Kör querie
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 
+            // Sätt userId
             preparedStatement.setObject(1, userId);
 
+            // Uppdatera
             ResultSet set =  preparedStatement.executeQuery();
+
+            // Medan den uppdateras
             while (set.next()){
 
+                // Sätt samtliga objekt
                 UUID id = set.getObject("id", UUID.class);
                 UUID userid = set.getObject("user_id", UUID.class);
                 String description = set.getString("description");
@@ -76,23 +91,31 @@ public class PostgreTransactionRepository implements ITransactionRepository {
                 String type = set.getString("type");
                 Timestamp date = set.getTimestamp("created_at");
 
+                // Skapa transaktions objekt
                 Transaction transaction = new Transaction(id, userid, description, amount, type, date);
+
+                // Lägg till i arraylist
                 transactions.add(transaction);
 
             }
 
         }
+        // Returnera arraylistan
         return transactions;
 
     }
 
     @Override
+    // Spara till databasen
     public void save(Transaction transaction) throws SQLException {
 
+        // SQL QUERIE för att inserta in i transactions tabellen
         String sql = "INSERT INTO transactions (id, user_id, description, amount, type, created_at) VALUES (?, ?, ?, ?, ?, ?)";
 
+        // Kör querie
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 
+            // Sätt samtliga object
             preparedStatement.setObject(1, transaction.getId());
             preparedStatement.setObject(2, transaction.getUserId());
             preparedStatement.setString(3, transaction.getDescription());
@@ -100,11 +123,12 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setString(5, transaction.getType());
             preparedStatement.setTimestamp(6, transaction.getDate());
 
+            // Uppdatera
             preparedStatement.executeUpdate();
 
 
         } catch (Exception e){
-            System.out.println("Something went wrong ;( ");
+            // Om det är fel skriv ut till utvecklaren
             e.printStackTrace();
 
         }
@@ -112,18 +136,26 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
         @Override
+        // Radera transaktion
         public void delete (UUID transactionId) throws SQLException {
+
+        // Radera där id för transaktionen stämmer överens
         String sql = "DELETE FROM transactions WHERE id = ?";
 
+        // Kör querie
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 
+            // Sätt id
             preparedStatement.setObject(1, transactionId);
 
+            // Uppdatera
             preparedStatement.executeUpdate();
 
           }
 
         }
+
+        // Samtliga metoder är för att få statistik kring spendering, inkomster, totalt antal transaktioner.
 
     @Override
     public int getTotalIncome(String type, UUID userId) throws SQLException {

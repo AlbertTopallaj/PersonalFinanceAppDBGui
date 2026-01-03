@@ -20,6 +20,7 @@ import java.sql.SQLException;
 
 public class Main extends Application {  // Main klassen, vad som ska köras
 
+    // Hämtar olika services
     private IUserRepository userRepository;
     private IUserService userService;
     private ITransactionRepository transactionRepository;
@@ -28,11 +29,12 @@ public class Main extends Application {  // Main klassen, vad som ska köras
     @Override
     public void start(Stage primaryStage) throws SQLException { // Metoden som ska köras när appen startas
 
+        // Env vars som är deklarerade i IntellIJ för integritet istället för att hårdkoda
         String dbUrl = System.getenv("DATABASE_URL");
         String dbUser = System.getenv("DATABASE_USER");
         String dbPassword = System.getenv("DATABASE_PASSWORD");
 
-
+        // Dependency injection
         userRepository = new PostgreUserRepository(dbUrl, dbUser, dbPassword);
         userService = new DefaultUserService(userRepository);
 

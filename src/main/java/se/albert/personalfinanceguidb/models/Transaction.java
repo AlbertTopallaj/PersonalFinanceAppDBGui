@@ -10,13 +10,27 @@ import java.util.UUID;
 // Importerade bibliotek
 
 public class Transaction { // Klassens namn
-    private UUID id;
-    private UUID userId;
-    private int amount; // En konstruktor för alla delar för en transaction, första är värdet i kronor
-    private String description; // Beskrivningen
-    private String type; // Typen av transaktion
-    private Date created_at; // Datumet
 
+    // UUID för transaktionen
+    private UUID id;
+
+    // Den kopplade userId för transaktionen
+    private UUID userId;
+
+    // Värdet för transaktionen
+    private int amount;
+
+    // Beskrivningen
+    private String description;
+
+    // Typen av transaktion
+    private String type;
+
+    // Datumet när transaktionen skapades
+    private Date created_at;
+
+
+    // Konstruktor för transaktion med odeklarerat datum
     public Transaction(UUID id, UUID userId, String description, int amount, String type, Date date) {
 
         this.id = id;
@@ -28,6 +42,7 @@ public class Transaction { // Klassens namn
 
     }
 
+    // Här omvandlas det till LocalDate och kör startofday
     public Transaction(UUID id, UUID userId, String description, int amount, String type, LocalDate date){
 
         this.id = id;
@@ -39,6 +54,7 @@ public class Transaction { // Klassens namn
 
     }
 
+    // Getters och setters
     public UUID getId() {
         return id;
     }
