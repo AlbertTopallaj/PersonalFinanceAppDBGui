@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.User;
@@ -37,17 +38,15 @@ public class MainMenuScene { // Klassens namn
 
 
     public Scene create(Stage primaryStage) { // Metoden för att skapa scenen
-        VBox root = new VBox(20); // Root sätts
-        root.setPadding(new Insets(30)); // Mellanrum sätts
-        root.setAlignment(Pos.CENTER); // Postioneringen sätts
+        StackPane root = new StackPane(); // Root sätts
+        root.setPadding(new Insets(40)); // Mellanrum sätts
 
-        Scene scene = new Scene(root, 700, 900); // Sidan sätts, root visar innehåll samt så sätts måtten för fönstret
+        VBox content = new VBox(20);
+        content.setAlignment(Pos.TOP_CENTER);
+        content.setPadding(new Insets(20));
+        content.setMaxWidth(800);
 
-        primaryStage.setWidth(700); // Bredden sätts
-        primaryStage.setHeight(900); // Höjden sätts
-        primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
 
-        UUID currentUser = AuthService.getuserID();
         User username = AuthService.getCurrentUser();
 
         Label title = new Label("Välkommen " + username.getUsername()); // Rubriken för sidan sätts
@@ -96,7 +95,7 @@ public class MainMenuScene { // Klassens namn
         quit.setMaxWidth(Double.MAX_VALUE); // Bredden sätts dubbla max värdet
         quit.setOnAction(e -> primaryStage.close()); // Om man trycker på knappen så stängs programmet ner
 
-        root.getChildren().addAll( // Alla delar samlas ihop och visas i scenen
+        content.getChildren().addAll( // Alla delar samlas ihop och visas i scenen
                 title,
                 balanceLabel,
                 addTransaction,
@@ -105,6 +104,8 @@ public class MainMenuScene { // Klassens namn
                 quit
         );
 
-        return scene; // Möjliggör för att faktiskt visa scenen
+        root.getChildren().add(content);
+
+        return new Scene(root, 900, 700);
     }
 }

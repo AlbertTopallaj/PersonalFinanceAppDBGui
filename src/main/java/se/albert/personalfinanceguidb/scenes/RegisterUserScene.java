@@ -39,12 +39,8 @@ public class RegisterUserScene {// Klassens namn
 
         VBox content = new VBox(20);
         content.setAlignment(Pos.TOP_CENTER);
-
-        Scene scene = new Scene(root, 700, 900); // Scenen skapas
-
-        primaryStage.setWidth(700); // Bredden sätts
-        primaryStage.setHeight(900); // Höjden sätts
-        primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
+        content.setPadding(new Insets(20));
+        content.setMaxWidth(800);
 
         Label title = new Label("Registera konto"); // Rubriken sätts för sidan
         title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;"); // Textstorlek och fetmarkerad text sätts
@@ -74,6 +70,8 @@ public class RegisterUserScene {// Klassens namn
         });
 
         registerButton.setOnAction(e -> { // Om man trycker på knappen händer följande
+
+
 
             try {
                 String username = usernameField.getText();
@@ -140,7 +138,7 @@ public class RegisterUserScene {// Klassens namn
             }
         });
 
-        root.getChildren().addAll( // Tar emot alla delar och lägger in de i root
+        content.getChildren().addAll( // Tar emot alla delar och lägger in de i root
                 title,
                 userLabel, usernameField,
                 passLabel, passwordField,
@@ -148,6 +146,8 @@ public class RegisterUserScene {// Klassens namn
                 login
         );
 
-        return scene; // Möjliggör för att scenen ska synas
+        root.getChildren().add(content);
+
+        return new Scene(root, 900, 700);
     }
 }

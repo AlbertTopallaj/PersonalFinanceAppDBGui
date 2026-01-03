@@ -189,11 +189,6 @@ public class ViewTransactionScene { // Klassens namn
 
         root.getChildren().add(content);
 
-        Scene scene = new Scene(root, 900, 700); // Scenen skapas
-        primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
-        primaryStage.setResizable(true);
-
-        return scene; // Möjliggör för att faktiskt visa sidan
+        return new Scene(root, 900, 700);
     }
 }

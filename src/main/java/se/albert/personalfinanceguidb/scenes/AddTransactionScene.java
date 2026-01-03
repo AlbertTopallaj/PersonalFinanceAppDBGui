@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import se.albert.personalfinanceguidb.models.Transaction;
@@ -41,15 +42,13 @@ public class AddTransactionScene { // Klassens namn
     }
 
     public Scene create(Stage primaryStage) { // Metoden för att skapa scenen
-        VBox root = new VBox(20); // Root sätts
-        root.setPadding(new Insets(20)); // Mellanrum sätts
-        root.setAlignment(Pos.TOP_CENTER); // Postioneringen sätts
+        StackPane root = new StackPane(); // Root sätts
+        root.setPadding(new Insets(40)); // Mellanrum sätts
 
-        Scene scene = new Scene(root, 700, 900); // Scenen skapas
-
-        primaryStage.setWidth(700); // Bredden sätts
-        primaryStage.setHeight(900); // Höjden sätts
-        primaryStage.setResizable(false); // Användaren kan inte ändra fönstrets storlek
+        VBox content = new VBox(20);
+        content.setAlignment(Pos.TOP_CENTER);
+        content.setPadding(new Insets(20));
+        content.setMaxWidth(800);
 
         Label title = new Label("Lägg till transaktion"); // Rubriken sätts
         title.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;"); // Textstorlek samt fetmarkerad text sätts
@@ -119,7 +118,7 @@ public class AddTransactionScene { // Klassens namn
         );
 
         // Layout
-        root.getChildren().addAll( // Alla delar sätts ihop och visas i root
+        content.getChildren().addAll( // Alla delar sätts ihop och visas i root
                 title,
                 new Label("Typ:"), typeBox,
                 new Label("Belopp:"), amountField,
@@ -129,6 +128,8 @@ public class AddTransactionScene { // Klassens namn
                 saveBtn, backBtn
         );
 
-        return scene; // Möjliggör för att scenen faktiskt ska synas
+        root.getChildren().add(content);
+
+        return new Scene(root, 900, 700);
     }
 }
