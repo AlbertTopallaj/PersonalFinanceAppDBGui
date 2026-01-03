@@ -77,10 +77,6 @@ public class ViewTransactionScene { // Klassens namn
        ListView<Transaction> transactionListView = new ListView<>(filteredTransactions); // En listview för filterade transaktioner
        transactionListView.setPrefHeight(300); // Höjden sätts för listview
 
-        // --- Statistik ---
-        VBox statsBox = new VBox(8); // En ny Vbox för statistik sätts med 8 i mellanrum
-        statsBox.setAlignment(Pos.CENTER_LEFT); // Postioneringen är i mitten till vänster
-
         Label statsTitle = new Label("Statistik"); // Rubriken sätts
         statsTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;"); // Styling för rubriken, textstorlek samt fetmarkerad text
 
@@ -88,7 +84,6 @@ public class ViewTransactionScene { // Klassens namn
         Label dailyIncome = new Label();// Labels för att kunna visa data
         Label weeklySpending = new Label();
         Label weeklyIncome = new Label();
-        Label monthlyAll = new Label();
         Label monthlySpending = new Label();
         Label monthlyIncome = new Label();
         Label yearlySpending = new Label();
@@ -97,6 +92,16 @@ public class ViewTransactionScene { // Klassens namn
         Label totalIncome = new Label();
         Label transactionCount = new Label();
 
+        HBox dailyBox = new HBox(10, new Label("Idag: "), dailySpending, dailyIncome);
+        HBox weeklyBox = new HBox(10, new Label("Denna vecka: "), weeklySpending, weeklyIncome);
+        HBox monthlyBox = new HBox(10, new Label("Denna månad: "), monthlySpending, monthlyIncome);
+        HBox yearlyBox = new HBox(10, new Label("Detta år: "), yearlySpending, yearlyIncome);
+        HBox totalBox = new HBox(10, new Label("Totalt: "), totalSpending, totalIncome, transactionCount);
+
+
+        VBox statsBox = new VBox(5, statsTitle, dailyBox, weeklyBox, monthlyBox, yearlyBox, totalBox);
+        statsBox.setAlignment(Pos.CENTER_LEFT);
+        statsBox.setPadding(new Insets(10));
 
 
         Runnable updateStats = () -> { // Möjliggör uppdatering av labels för att visa data
@@ -105,64 +110,64 @@ public class ViewTransactionScene { // Klassens namn
             UUID currentUserId = AuthService.getuserID();
             // Sätter text och så att datan visas för samtliga labels
             try {
-                dailySpending.setText("Spenderat idag: "+ transactionService.getDailyExpense("Spendering", currentUserId));
+                dailySpending.setText("Spenderat idag: "+ transactionService.getDailyExpense("Spendering", currentUserId) + "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                dailyIncome.setText("Inkomst idag: "+ transactionService.getDailyIncome("Inkomst", currentUserId));
+                dailyIncome.setText("Inkomst idag: "+ transactionService.getDailyIncome("Inkomst", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                weeklySpending.setText("Spenderat denna vecka: "+ transactionService.getWeeklyExpense("Spendering", currentUserId));
+                weeklySpending.setText("Spenderat denna vecka: "+ transactionService.getWeeklyExpense("Spendering", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                weeklyIncome.setText("Inkomst denna vecka: "+ transactionService.getWeeklyIncome("Inkomst", currentUserId));
+                weeklyIncome.setText("Inkomst denna vecka: "+ transactionService.getWeeklyIncome("Inkomst", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                monthlySpending.setText("Spenderat denna månad: "+ transactionService.getMonthlyExpense("Spending", currentUserId));
+                monthlySpending.setText("Spenderat denna månad: "+ transactionService.getMonthlyExpense("Spending", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                monthlyIncome.setText("Inkomst denna månad: " + transactionService.getMonthlyIncome("Inkomst", currentUserId));
+                monthlyIncome.setText("Inkomst denna månad: " + transactionService.getMonthlyIncome("Inkomst", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                yearlySpending.setText("Spenderat detta år: " + transactionService.getYearlyExpense("Spendering", currentUserId));
+                yearlySpending.setText("Spenderat detta år: " + transactionService.getYearlyExpense("Spendering", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                yearlyIncome.setText("Spenderat idag: "+ transactionService.getYearlyIncome("Inkomst", currentUserId));
+                yearlyIncome.setText("Inkomst detta år: "+ transactionService.getYearlyIncome("Inkomst", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                totalSpending.setText("Spenderat totalt: "+ transactionService.getTotalExpense("Spendering", currentUserId));
+                totalSpending.setText("Spenderat totalt: "+ transactionService.getTotalExpense("Spendering", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                totalIncome.setText("Inkomst totalt: "+ transactionService.getTotalIncome("Inkomst", currentUserId));
+                totalIncome.setText("Inkomst totalt: "+ transactionService.getTotalIncome("Inkomst", currentUserId)+ "kr ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                transactionCount.setText("Totalt antal transaktioner: " + transactionService.getTransactionCount(currentUserId));
+                transactionCount.setText("Totalt antal transaktioner: " + transactionService.getTransactionCount(currentUserId)+ "st ");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         };
         updateStats.run(); // En funktion som körs för att uppdatera de
 
-        statsBox.getChildren().addAll(statsTitle, dailySpending, weeklyIncome, monthlyAll, yearlySpending, transactionCount); // Ger statistik Vboxen alla nya delar som ska visas
+        // Ger statistik Vboxen alla nya delar som ska visas
 
         // --- Datumfilter logik ---
         dateFilter.setOnAction(e -> { // När man använder dateFilter så händer följande:
