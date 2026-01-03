@@ -274,6 +274,23 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     @Override
     public int getTransactionCount(UUID userId) throws SQLException {
 
+        String sql =
+                "SELECT COUNT(t.id) AS transaction_count " +
+                        "FROM users u " +
+                        "INNER JOIN transactions t ON t.user_id = u.id " +
+                        "WHERE u.id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setObject(1, userId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("transaction_count");
+                }
+                return 0;
+            }
+        }
     }
+
 }
 

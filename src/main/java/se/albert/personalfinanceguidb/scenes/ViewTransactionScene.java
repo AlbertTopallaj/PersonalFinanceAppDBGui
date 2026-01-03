@@ -88,6 +88,7 @@ public class ViewTransactionScene { // Klassens namn
         Label weeklyIncome = new Label();
         Label monthlyAll = new Label();
         Label yearlySpending = new Label();
+        Label transactionCount = new Label();
 
 
 
@@ -113,10 +114,15 @@ public class ViewTransactionScene { // Klassens namn
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            try {
+                transactionCount.setText("Totalt antal transaktioner: " + transactionRepository.getTransactionCount(currentUserId));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         };
         updateStats.run(); // En funktion som körs för att uppdatera de
 
-        statsBox.getChildren().addAll(statsTitle, dailySpending, weeklyIncome, monthlyAll, yearlySpending); // Ger statistik Vboxen alla nya delar som ska visas
+        statsBox.getChildren().addAll(statsTitle, dailySpending, weeklyIncome, monthlyAll, yearlySpending, transactionCount); // Ger statistik Vboxen alla nya delar som ska visas
 
         // --- Datumfilter logik ---
         dateFilter.setOnAction(e -> { // När man använder dateFilter så händer följande:
