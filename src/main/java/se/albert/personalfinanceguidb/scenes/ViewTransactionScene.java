@@ -80,8 +80,10 @@ public class ViewTransactionScene { // Klassens namn
         Label statsTitle = new Label("Statistik"); // Rubriken sätts
         statsTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;"); // Styling för rubriken, textstorlek samt fetmarkerad text
 
+        // Labels för att kunna visa data
+
         Label dailySpending = new Label();
-        Label dailyIncome = new Label();// Labels för att kunna visa data
+        Label dailyIncome = new Label();
         Label weeklySpending = new Label();
         Label weeklyIncome = new Label();
         Label monthlySpending = new Label();
@@ -92,13 +94,15 @@ public class ViewTransactionScene { // Klassens namn
         Label totalIncome = new Label();
         Label transactionCount = new Label();
 
+
+        // HBox för struktur gällande statistik
         HBox dailyBox = new HBox(10, new Label("Idag: "), dailySpending, dailyIncome);
         HBox weeklyBox = new HBox(10, new Label("Denna vecka: "), weeklySpending, weeklyIncome);
         HBox monthlyBox = new HBox(10, new Label("Denna månad: "), monthlySpending, monthlyIncome);
         HBox yearlyBox = new HBox(10, new Label("Detta år: "), yearlySpending, yearlyIncome);
         HBox totalBox = new HBox(10, new Label("Totalt: "), totalSpending, totalIncome, transactionCount);
 
-
+        // En Vbox som fångar upp allt
         VBox statsBox = new VBox(5, statsTitle, dailyBox, weeklyBox, monthlyBox, yearlyBox, totalBox);
         statsBox.setAlignment(Pos.CENTER_LEFT);
         statsBox.setPadding(new Insets(10));
