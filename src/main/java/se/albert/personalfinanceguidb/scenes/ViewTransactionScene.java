@@ -84,10 +84,17 @@ public class ViewTransactionScene { // Klassens namn
         Label statsTitle = new Label("Statistik"); // Rubriken sätts
         statsTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;"); // Styling för rubriken, textstorlek samt fetmarkerad text
 
-        Label dailySpending = new Label(); // Labels för att kunna visa data
+        Label dailySpending = new Label();
+        Label dailyIncome = new Label();// Labels för att kunna visa data
+        Label weeklySpending = new Label();
         Label weeklyIncome = new Label();
         Label monthlyAll = new Label();
+        Label monthlySpending = new Label();
+        Label monthlyIncome = new Label();
         Label yearlySpending = new Label();
+        Label yearlyIncome = new Label();
+        Label totalSpending = new Label();
+        Label totalIncome = new Label();
         Label transactionCount = new Label();
 
 
@@ -103,17 +110,47 @@ public class ViewTransactionScene { // Klassens namn
                 throw new RuntimeException(e);
             }
             try {
+                dailyIncome.setText("Inkomst idag: "+ transactionService.getDailyIncome("Inkomst", currentUserId));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                weeklySpending.setText("Spenderat denna vecka: "+ transactionService.getWeeklyExpense("Spendering", currentUserId));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
                 weeklyIncome.setText("Inkomst denna vecka: "+ transactionService.getWeeklyIncome("Inkomst", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                monthlyAll.setText("Totalt denna månad: " + transactionService.getMonthlyIncome("Inkomst", currentUserId));
+                monthlySpending.setText("Spenderat denna månad: "+ transactionService.getMonthlyExpense("Spending", currentUserId));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                monthlyIncome.setText("Inkomst denna månad: " + transactionService.getMonthlyIncome("Inkomst", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
                 yearlySpending.setText("Spenderat detta år: " + transactionService.getYearlyExpense("Spendering", currentUserId));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                yearlyIncome.setText("Spenderat idag: "+ transactionService.getYearlyIncome("Inkomst", currentUserId));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                totalSpending.setText("Spenderat totalt: "+ transactionService.getTotalExpense("Spendering", currentUserId));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                totalIncome.setText("Inkomst totalt: "+ transactionService.getTotalIncome("Inkomst", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
