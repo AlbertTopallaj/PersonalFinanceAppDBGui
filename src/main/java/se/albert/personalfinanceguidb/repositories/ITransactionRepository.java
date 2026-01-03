@@ -8,8 +8,6 @@ import java.util.UUID;
 
 public interface ITransactionRepository {
 
-    Transaction findById(UUID transactionId) throws SQLException;
-
     // Ta emot alla transaktioner per användare
     List<Transaction> findAllByUserId(UUID userId) throws SQLException;
 

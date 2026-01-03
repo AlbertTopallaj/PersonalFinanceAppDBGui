@@ -26,8 +26,6 @@ public class PostgreUserRepository implements IUserRepository {
                     "username TEXT UNIQUE NOT NULL," +
                     "password TEXT NOT NULL," +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-
-
         }
     }
 
@@ -62,9 +60,7 @@ public class PostgreUserRepository implements IUserRepository {
 
             // Returnera user objekt
             return Optional.of(user);
-
         }
-
     }
 
     @Override
@@ -89,8 +85,6 @@ public class PostgreUserRepository implements IUserRepository {
 
             // Här sätts man userId för att undvika att första användaren i systemet inte kan transaktioner
             AuthService.setUserID(user.getId());
-
         }
-
     }
 }

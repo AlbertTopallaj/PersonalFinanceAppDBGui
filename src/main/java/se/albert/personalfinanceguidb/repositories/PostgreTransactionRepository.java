@@ -22,7 +22,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         connection = DriverManager.getConnection(url, user, password);
 
         // När anslutningen har skett
-        try(Statement statement = connection.createStatement()){
+        try (Statement statement = connection.createStatement()) {
 
             // Skapa tabell
             statement.execute("CREATE TABLE IF NOT EXISTS transactions (" +
@@ -33,32 +33,6 @@ public class PostgreTransactionRepository implements ITransactionRepository {
                     "type TEXT NOT NULL," +
                     "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)");
         }
-    }
-
-    @Override
-    public Transaction findById(UUID transactionId) throws SQLException {
-
-        String sql = "SELECT * FROM transactions WHERE id = ?";
-
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setObject(1, transactionId);
-
-            ResultSet set = preparedStatement.executeQuery();
-            if (!set.next()){
-                return null;
-            }
-
-            UUID id = set.getObject("id", UUID.class);
-            UUID userId = set.getObject("user_id", UUID.class);
-            String description = set.getString("description");
-            int amount = set.getInt("amount");
-            String type = set.getString("type");
-            Timestamp date = set.getTimestamp("created_at");
-
-            return new Transaction(id, userId, description, amount, type, date);
-        }
-
     }
 
     @Override
@@ -96,13 +70,10 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
                 // Lägg till i arraylist
                 transactions.add(transaction);
-
             }
-
         }
         // Returnera arraylistan
         return transactions;
-
     }
 
     @Override
@@ -125,14 +96,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
             // Uppdatera
             preparedStatement.executeUpdate();
-
-
-        } catch (Exception e){
-            // Om det är fel skriv ut till utvecklaren
-            e.printStackTrace();
-
         }
-
     }
 
         @Override
@@ -150,10 +114,8 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
             // Uppdatera
             preparedStatement.executeUpdate();
-
-          }
-
         }
+    }
 
         // Samtliga metoder är för att få statistik kring spendering, inkomster, totalt antal transaktioner.
 
@@ -336,6 +298,5 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             }
         }
     }
-
 }
 
