@@ -158,6 +158,8 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         // Samtliga metoder är för att få statistik kring spendering, inkomster, totalt antal transaktioner.
 
     @Override
+
+    // Summan av alla inkomst transaktioner per användare
     public int getTotalIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND user_id = ?";
 
@@ -171,6 +173,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av alla utgifts transaktioner per användare
     public int getTotalExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND user_id = ?";
 
@@ -185,6 +188,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av alla inkomster idag per användare
     public int getDailyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE AND user_id = ?";
 
@@ -198,6 +202,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den veckovisa inkomst per användaren
     public int getWeeklyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE) AND user_id = ?";
 
@@ -211,6 +216,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den månadvisa inkomsten per användare
     public int getMonthlyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE) AND user_id = ?";
 
@@ -226,6 +232,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den årliga inkomsten per användare
     public int getYearlyIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE) AND user_id = ?";
 
@@ -241,6 +248,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den dagliga utgiften per användare
     public int getDailyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE(created_at) = CURRENT_DATE AND user_id = ?";
 
@@ -256,6 +264,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den veckovisa utgiften per användare
     public int getWeeklyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('week', created_at) = DATE_TRUNC('week', CURRENT_DATE) AND user_id = ?";
 
@@ -269,6 +278,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den månadvisa utgiften per användare
     public int getMonthlyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE) AND user_id = ?";
 
@@ -284,6 +294,7 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den årliga utgiften per användare
     public int getYearlyExpense(String type, UUID userId) throws SQLException {
         String sql = "SELECT sum(amount) FROM transactions WHERE type = ? AND DATE_TRUNC('year', created_at) = DATE_TRUNC('year', CURRENT_DATE) AND user_id = ?";
 
@@ -299,18 +310,20 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     }
 
     @Override
+    // Summan av den totala kontobalansen per användare
     public int getAccountBalance(UUID userId) throws SQLException {
         return getTotalIncome("Inkomst", userId) - getTotalExpense("Spendering", userId);
     }
 
     @Override
+    // Totalt antal transaktioner per användare
     public int getTransactionCount(UUID userId) throws SQLException {
 
         String sql =
-                "SELECT COUNT(t.id) AS transaction_count " +
-                        "FROM users u " +
-                        "INNER JOIN transactions t ON t.user_id = u.id " +
-                        "WHERE u.id = ?";
+                "SELECT COUNT(t.id) AS transaction_count " + // Räkna alla transaktioner
+                        "FROM users u " + // Från tabellen users
+                        "INNER JOIN transactions t ON t.user_id = u.id " + // JOIN (koppla samman) med transactions tabellen
+                        "WHERE u.id = ?"; // Där endast för den valda användaren
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setObject(1, userId);
