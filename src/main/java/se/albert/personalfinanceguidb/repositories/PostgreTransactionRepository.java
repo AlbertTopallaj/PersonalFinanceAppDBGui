@@ -32,6 +32,9 @@ public class PostgreTransactionRepository implements ITransactionRepository {
                     "amount INT NOT NULL," +
                     "type TEXT NOT NULL," +
                     "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)");
+        } catch (SQLException e) {
+            System.err.println("Databasfel " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -52,10 +55,10 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setObject(1, userId);
 
             // Uppdatera
-            ResultSet set =  preparedStatement.executeQuery();
+            try (ResultSet set =  preparedStatement.executeQuery()){
 
             // Medan den uppdateras
-            while (set.next()){
+            while (set.next()) {
 
                 // Sätt samtliga objekt
                 UUID id = set.getObject("id", UUID.class);
@@ -70,7 +73,11 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
                 // Lägg till i arraylist
                 transactions.add(transaction);
+               }
             }
+        } catch (SQLException e) {
+            System.err.println("Datbasfel: " + e.getMessage());
+            e.printStackTrace();
         }
         // Returnera arraylistan
         return transactions;
@@ -96,6 +103,9 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
             // Uppdatera
             preparedStatement.executeUpdate();
+        } catch (SQLException e){
+            System.err.println("Databasfel " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -114,13 +124,15 @@ public class PostgreTransactionRepository implements ITransactionRepository {
 
             // Uppdatera
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
         // Samtliga metoder är för att få statistik kring spendering, inkomster, totalt antal transaktioner.
 
     @Override
-
     // Summan av alla inkomst transaktioner per användare
     public int getTotalIncome(String type, UUID userId) throws SQLException {
         String sql = "SELECT SUM(amount) FROM transactions WHERE type = ? AND user_id = ?";
@@ -128,10 +140,16 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
         }
+        return 0;
     }
 
     @Override
@@ -142,11 +160,16 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
 
-        }
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -157,10 +180,16 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
-        }
+
+           try (ResultSet resultSet = preparedStatement.executeQuery()) {
+               resultSet.next();
+               return resultSet.getInt(1);
+           }
+
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -171,10 +200,16 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
-        }
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -186,11 +221,15 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
 
-            return resultSet.getInt(1);
-        }
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -202,11 +241,15 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
 
-            return resultSet.getInt(1);
-        }
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -218,11 +261,15 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
 
-            return resultSet.getInt(1);
-        }
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -233,10 +280,16 @@ public class PostgreTransactionRepository implements ITransactionRepository {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
-        }
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -248,11 +301,15 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
 
-            return resultSet.getInt(1);
-        }
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override
@@ -264,11 +321,15 @@ public class PostgreTransactionRepository implements ITransactionRepository {
             preparedStatement.setString(1, type);
             preparedStatement.setObject(2, userId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
 
-            return resultSet.getInt(1);
-        }
+        } catch (SQLException e) {
+            System.err.println("Databas " + e.getMessage());
+            e.printStackTrace();
+        } return 0;
     }
 
     @Override

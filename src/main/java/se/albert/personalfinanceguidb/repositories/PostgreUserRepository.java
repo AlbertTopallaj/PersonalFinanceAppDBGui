@@ -27,6 +27,7 @@ public class PostgreUserRepository implements IUserRepository {
                     "password TEXT NOT NULL," +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
         } catch (SQLException e) {
+            System.err.println("Fel vid databasanslutning " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -43,25 +44,30 @@ public class PostgreUserRepository implements IUserRepository {
             preparedStatement.setString(1, username);
 
             // Uppdatera och visar resultat
-            ResultSet set = preparedStatement.executeQuery();
+            try (ResultSet set = preparedStatement.executeQuery()) {
+                // Om ingenting hittas returnera tomt
+                if (!set.next()) {
+                    return Optional.empty();
+                }
+                // Sätt övriga objekt
+                UUID id = set.getObject("id", UUID.class);
+                username = set.getString("username");
+                String password = set.getString("password");
+                Timestamp createdAt = set.getTimestamp("created_at");
 
-            // Om ingenting hittas returnera tomt
-            if (!set.next()) {
-                return Optional.empty();
+                // Skapa user objekt
+                User user = new User(id, username, password, createdAt);
+
+                // Returnera user objekt
+                return Optional.of(user);
+
+            } catch (SQLException e) {
+                System.err.println("Fel vid hämtning av användare " + e.getMessage());
+                e.printStackTrace();
             }
 
-            // Sätt övriga objekt
-            UUID id = set.getObject("id", UUID.class);
-            username = set.getString("username");
-            String password = set.getString("password");
-            Timestamp createdAt = set.getTimestamp("created_at");
-
-            // Skapa user objekt
-            User user = new User(id, username, password, createdAt);
-
-            // Returnera user objekt
-            return Optional.of(user);
         } catch (SQLException e) {
+            System.err.println("Databasfel " + e.getMessage());
             e.printStackTrace();
         } return Optional.empty();
     }
@@ -89,6 +95,7 @@ public class PostgreUserRepository implements IUserRepository {
             // Här sätts man userId för att undvika att första användaren i systemet inte kan transaktioner
             AuthService.setUserID(user.getId());
         } catch (SQLException e){
+            System.err.println("Fel vid registering av användare " + e.getMessage());
             e.printStackTrace();
         }
     }
