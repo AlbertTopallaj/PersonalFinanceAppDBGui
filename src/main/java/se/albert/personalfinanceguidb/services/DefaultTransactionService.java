@@ -97,4 +97,9 @@ public class DefaultTransactionService implements ITransactionService{
         // Hämta årlig utgift med typ och userId
         return transactionRepository.getYearlyExpense("Spendering", userId);
     }
+
+    @Override
+    public int getTransactionCount(UUID userId) throws Exception {
+        return transactionRepository.getTransactionCount(userId);
+    }
 }

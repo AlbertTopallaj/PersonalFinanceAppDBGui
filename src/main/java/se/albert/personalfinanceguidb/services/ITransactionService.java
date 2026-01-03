@@ -41,4 +41,7 @@ public interface ITransactionService {
     // Hämta årlig utgift
     int getYearlyExpense(String type, UUID userId) throws Exception;
 
+    // Hämta alla transaktioner per användare
+    int getTransactionCount(UUID userId) throws Exception;
+
 }

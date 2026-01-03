@@ -98,27 +98,27 @@ public class ViewTransactionScene { // Klassens namn
             UUID currentUserId = AuthService.getuserID();
             // Sätter text och så att datan visas för samtliga labels
             try {
-                dailySpending.setText("Spenderat idag: "+ transactionRepository.getDailyExpense("Spendering", currentUserId));
+                dailySpending.setText("Spenderat idag: "+ transactionService.getDailyExpense("Spendering", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                weeklyIncome.setText("Inkomst denna vecka: "+ transactionRepository.getWeeklyIncome("Inkomst", currentUserId));
+                weeklyIncome.setText("Inkomst denna vecka: "+ transactionService.getWeeklyIncome("Inkomst", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                monthlyAll.setText("Totalt denna månad: " + transactionRepository.getMonthlyIncome("Inkomst", currentUserId));
+                monthlyAll.setText("Totalt denna månad: " + transactionService.getMonthlyIncome("Inkomst", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                yearlySpending.setText("Spenderat detta år: " + transactionRepository.getYearlyExpense("Spendering", currentUserId));
+                yearlySpending.setText("Spenderat detta år: " + transactionService.getYearlyExpense("Spendering", currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             try {
-                transactionCount.setText("Totalt antal transaktioner: " + transactionRepository.getTransactionCount(currentUserId));
+                transactionCount.setText("Totalt antal transaktioner: " + transactionService.getTransactionCount(currentUserId));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -150,7 +150,6 @@ public class ViewTransactionScene { // Klassens namn
                        return true;
                 }
             });
-
         });
 
         // --- Typfilter logik ---
