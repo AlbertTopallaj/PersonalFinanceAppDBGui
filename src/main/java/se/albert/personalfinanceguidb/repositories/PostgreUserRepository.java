@@ -1,6 +1,7 @@
 package se.albert.personalfinanceguidb.repositories;
 
 import se.albert.personalfinanceguidb.models.User;
+import se.albert.personalfinanceguidb.services.AuthService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -63,6 +64,8 @@ public class PostgreUserRepository implements IUserRepository {
             if (preparedStatement.executeUpdate() != 1){
                 throw new SQLException("Failed to insert user");
             }
+
+            AuthService.setUserID(user.getId());
 
         }
 

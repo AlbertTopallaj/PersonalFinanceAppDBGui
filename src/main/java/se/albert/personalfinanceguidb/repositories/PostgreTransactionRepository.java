@@ -269,8 +269,6 @@ public class PostgreTransactionRepository implements ITransactionRepository {
     @Override
     public int getAccountBalance(UUID userId) throws Exception {
         return getTotalIncome("Inkomst", userId) - getTotalExpense("Spendering", userId);
-
     }
-
 }
 

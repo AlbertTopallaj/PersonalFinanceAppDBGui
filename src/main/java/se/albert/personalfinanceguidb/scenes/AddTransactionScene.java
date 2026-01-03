@@ -80,9 +80,6 @@ public class AddTransactionScene { // Klassens namn
             try { // Try catch för att hantera fel
                 UUID id = UUID.randomUUID();
                 UUID userId = AuthService.getuserID();
-                if (userId ==  null){
-                    transactionSaved.setText("Ingen användare inloggad bre");
-                }
 
                 String type = typeBox.getValue(); // Värdet för vad för typ av transaktion tas emot
                 int amount = Integer.parseInt(amountField.getText()); // Värdet för hur mycket kronor transaktionen innehåller tas emot, man parsar int så att det kan bli string

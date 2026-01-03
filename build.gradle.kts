@@ -29,6 +29,8 @@ javafx {
 dependencies {
     implementation("org.postgresql:postgresql:42.7.3")
     implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation ("org.openjfx:javafx-controls:21")
+    implementation ("org.openjfx:javafx-fxml:21")
 }
 
 
