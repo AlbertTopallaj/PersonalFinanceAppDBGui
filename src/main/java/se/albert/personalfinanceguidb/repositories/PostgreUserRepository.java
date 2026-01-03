@@ -26,6 +26,8 @@ public class PostgreUserRepository implements IUserRepository {
                     "username TEXT UNIQUE NOT NULL," +
                     "password TEXT NOT NULL," +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -46,7 +48,6 @@ public class PostgreUserRepository implements IUserRepository {
             // Om ingenting hittas returnera tomt
             if (!set.next()) {
                 return Optional.empty();
-
             }
 
             // Sätt övriga objekt
@@ -60,7 +61,9 @@ public class PostgreUserRepository implements IUserRepository {
 
             // Returnera user objekt
             return Optional.of(user);
-        }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } return Optional.empty();
     }
 
     @Override
@@ -85,6 +88,8 @@ public class PostgreUserRepository implements IUserRepository {
 
             // Här sätts man userId för att undvika att första användaren i systemet inte kan transaktioner
             AuthService.setUserID(user.getId());
+        } catch (SQLException e){
+            e.printStackTrace();
         }
     }
 }
